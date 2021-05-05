@@ -1,3 +1,2 @@
-# gnssrefl_jupyter
-
-Jupyter notebooks for the gnssrefl project
+# gnssir_jupyter_docker_test
+docker test
