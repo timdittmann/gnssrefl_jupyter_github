@@ -1,2 +1,4 @@
-../gnssrefl
-jupyter
+numpy
+pandas
+seaborn
+gnssrefl

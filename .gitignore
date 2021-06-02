@@ -1,8 +1,2 @@
-logs
-input
-orbits/*
-!orbits/.gitkeep 
-.DS_Store
 __pycache__
-.ipynb_checkpoints
-[0-9]*
+.DS_Store
