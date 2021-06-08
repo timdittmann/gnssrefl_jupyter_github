@@ -30,8 +30,8 @@ docker run \
         -p 8888:8888 \
         --name='gnssir_jupyter_docker' \
         -e GRANT_SUDO=yes --user root \
-        -v ~/UNAVCO_projects/git/gnssir_jupyter_docker_test/notebooks:/home/jovyan/gnssir_jupyter/notebooks \
- 	-v ~/UNAVCO_projects/git/gnssir_jupyter_docker_test/bin:/home/jovyan/gnssir_jupyter/bin \
+        -v notebooks:/home/jovyan/gnssir_jupyter/notebooks \
+ 	-v bin:/home/jovyan/gnssir_jupyter/bin \
         --env-file gnssir_env.txt \
         --restart=unless-stopped \
         gnssir_jupyter/python
@@ -43,5 +43,5 @@ echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 
 # Do not open jupyter notebook directly - detached mode (-d), and then use docker execute to enter the container in a bash shell
 
-#docker run -it -d -p 8888:8888 --name='gnssir_jupyter_docker' -e GRANT_SUDO=yes -v ~/UNAVCO_projects/git/gnssir_jupyter_docker_test/notebooks:/home/jovyan/gnssir_jupyter gnssir_jupyter/python
+#docker run -it -d -p 8888:8888 --name='gnssir_jupyter_docker' -e GRANT_SUDO=yes -v ./notebooks:/home/jovyan/gnssir_jupyter gnssir_jupyter/python
 #docker exec -it gnssir_jupyter_docker /bin/bash
