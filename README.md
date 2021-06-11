@@ -3,10 +3,10 @@
 Jupyter Notebooks using the GNSS IR reflectometry code written by Kristine Larson. See https://github.com/kristinemlarson/gnssrefl
 
 ### 1. Install Docker 
-&ensp;&ensp; Pick your system and follow instructions on the Docker website. \
-* **Mac** - https://docs.docker.com/docker-for-mac/install/ \
-* **Windows** - https://docs.docker.com/docker-for-windows/install/ \
-* **Ubuntu** - https://docs.docker.com/install/linux/docker-ce/ubuntu/ \
+&ensp;&ensp; Pick your system and follow instructions on the Docker website. 
+* **Mac** - https://docs.docker.com/docker-for-mac/install/ 
+* **Windows** - https://docs.docker.com/docker-for-windows/install/ 
+* **Ubuntu** - https://docs.docker.com/install/linux/docker-ce/ubuntu/ 
 
 *Once installed, type `docker run hello-world` in terminal to check if installed correctly.*
 
