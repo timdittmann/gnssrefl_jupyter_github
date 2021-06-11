@@ -13,8 +13,8 @@ Jupyter Notebooks using the GNSS IR reflectometry code written by Kristine Larso
 More information on [getting started, testing your installation, and developing.](https://docs.docker.com/get-started/) 
 
 ### 2. Clone the Git Repository to your local machine 
-Using the HTTPS or SSH links in this repository, clone the repository to your local machine. You may do this in a terminal 
-using git or use a git client (*Fork*, etc...) You will want to do this in a location on your local computer that you 
+Use the HTTPS link in this repository to clone the repository to your local machine. You may do this in a terminal 
+using git or use a git client ([Fork](https://git-fork.com/), etc...) You will want to do this in a location on your local computer that you 
 wish to store the repository. 
 
 To get the latest version of master or your own branch, use the git pull command.   
