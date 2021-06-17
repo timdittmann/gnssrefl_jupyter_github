@@ -31,7 +31,7 @@ docker run \
         --name='gnssir_jupyter_docker' \
         -e GRANT_SUDO=yes --user root \
         -v notebooks:/home/jovyan/gnssir_jupyter/notebooks \
- 	-v bin:/home/jovyan/gnssir_jupyter/bin \
+ 	    -v bin:/home/jovyan/gnssir_jupyter/bin \
         --env-file gnssir_env.txt \
         --restart=unless-stopped \
         gnssir_jupyter/python

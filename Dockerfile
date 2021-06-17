@@ -42,4 +42,4 @@ RUN pip install --quiet --no-cache-dir --requirement /tmp/requirements.txt && \
 COPY notebooks/* /home/jovyan/gnssir_jupyter/notebooks/
 
 # Start the jupyter notebook upon executuion
-ENTRYPOINT ["jupyter", "notebook", "--no-browser", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssir_jupyter/"]
+ENTRYPOINT ["jupyter", "notebook", "--no-browser", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssir_jupyter/notebooks"]

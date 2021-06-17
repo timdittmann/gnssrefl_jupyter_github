@@ -34,7 +34,7 @@ Navigate to the directory where the Dockerfile is stored and run...
 ### Run image as container
 Prior to running the docker, make sure you do not have other jupyter notebooks running on 8888 or else it will not work properly. To open the jupyter notebook directly in the run command...
 
-`docker run -it -p 8888:8888 --name='gnssir_jupyter_docker' -e GRANT_SUDO=yes --user root -v ~[path_to_local_repository]/notebooks:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v notebooks:/home/jovyan/gnssir_jupyter/notebooks -v bin:/home/jovyan/gnssir_jupyter/bin --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
 
 #### Description of commands used
 * `-it` : interactive process (shell)
