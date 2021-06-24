@@ -30,7 +30,6 @@ docker run \
         -p 8888:8888 \
         --name='gnssir_jupyter' \
         -e GRANT_SUDO=yes --user root \
- 	    -v gnssir_jupyter:/home/jovyan/gnssir_jupyter \
         --env-file gnssir_env.txt \
         --restart=unless-stopped \
         gnssir_jupyter/python
