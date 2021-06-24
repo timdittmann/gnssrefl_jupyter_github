@@ -4,8 +4,8 @@ echo "Resetting docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "Stop / Remove gnssir_jupyter container - command -> docker stop and docker rm gnssir_jupyter_docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-docker stop gnssir_jupyter_docker
-docker rm gnssir_jupyter_docker
+docker stop gnssir_jupyter
+docker rm gnssir_jupyter
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "Remove python image, image that made gnssir_jupyter_docker: command -> docker image rm python"
@@ -20,7 +20,7 @@ docker build --rm -t gnssir_jupyter/python .
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "docker run gnssir_jupyter_docker container"
 echo "Interactive, on port 8888, name = gnssir_jupyter_docker "
-echo "Mount external volumes - notebooks & events directory, bin directoy is copied into Docker container"
+echo "Mount external volumes - notebooks, orbits, working and bin directoy is copied into Docker container"
 echo "* Starting Container..."
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 
@@ -28,10 +28,9 @@ echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 docker run \
         -it \
         -p 8888:8888 \
-        --name='gnssir_jupyter_docker' \
+        --name='gnssir_jupyter' \
         -e GRANT_SUDO=yes --user root \
-        -v notebooks:/home/jovyan/gnssir_jupyter/notebooks \
- 	    -v bin:/home/jovyan/gnssir_jupyter/bin \
+ 	    -v gnssir_jupyter:/home/jovyan/gnssir_jupyter \
         --env-file gnssir_env.txt \
         --restart=unless-stopped \
         gnssir_jupyter/python

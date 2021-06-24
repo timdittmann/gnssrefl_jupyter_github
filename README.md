@@ -13,9 +13,15 @@ Jupyter Notebooks using the GNSS interferometric reflectometry code written by K
 More information on [getting started, testing your installation, and developing.](https://docs.docker.com/get-started/) 
 
 ### 2. Clone the Git Repository to your local machine 
+For instructions on how to install git on any OS: https://github.com/git-guides/install-git
+
 Use the HTTPS link in this repository to clone the repository to your local machine. You may do this in a terminal 
 using git or use a git client ([Fork](https://git-fork.com/), etc...) You will want to do this in a location on your local computer that you 
-wish to store the repository. 
+wish to store the repository.
+
+To clone a repository onto your local machine using the HTTPS link, click on the drop down that says 'clone' in the 
+repository and copy the link that says 'Clone with HTTPS'. Using your terminal, navigate to where you would like to clone 
+the repository and then run the command `git clone [https url]`
 
 To get the latest version of master or your own branch, use the git pull command.   
 
@@ -34,7 +40,7 @@ Navigate to the directory where the Dockerfile is stored and run...
 ### Run image as container
 Prior to running the docker, make sure you do not have other jupyter notebooks running on 8888 or else it will not work properly. To open the jupyter notebook directly in the run command...
 
-`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v notebooks:/home/jovyan/gnssir_jupyter/notebooks -v bin:/home/jovyan/gnssir_jupyter/bin --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v notebooks:/home/jovyan/gnssir_jupyter/notebooks -v bin:/home/jovyan/gnssir_jupyter/bin -v orbits:/home/jovyan/gnssir_jupyter/orbits -v gnssir_jupyter:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
 
 #### Description of commands used
 * `-it` : interactive process (shell)
