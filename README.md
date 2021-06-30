@@ -1,6 +1,6 @@
 # GNSS Reflectometry Jupyter Stack
 
-Jupyter Notebooks using the GNSS interferometric reflectometry code written by Kristine Larson. See https://github.com/kristinemlarson/gnssrefl
+Jupyter Notebooks for the GNSS interferometric reflectometry python package hosted at https://github.com/kristinemlarson/gnssrefl
 
 ### 1. Install Docker 
 &ensp;&ensp; Pick your system and follow instructions on the Docker website. 
