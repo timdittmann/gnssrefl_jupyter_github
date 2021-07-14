@@ -7,89 +7,90 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gnssrefl.gps as g
 import gnssrefl.gnssir as guts
+import wget
 
 
 def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
               nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid', srate=30):
     """
-    rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
-    :param station: string. required parameter.
+        rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
+        :param station: string. required parameter.
 
-    :param year: integer. required parameter.
+        :param year: integer. required parameter.
 
-    :param doy: integer. required parameter.
-    Day of year
+        :param doy: integer. required parameter.
+        Day of year
 
-    :param isnr: integer.
-    SNR format. This tells the code what elevation angles to to save data for.
-    options:
-    66 (default) : (saves all data with elevation angles less than 30 degress
-    99 : saves all data with elevation angles between 5 and 30 degrees
-    88 : saves all data with elevation angles between 5 and 90 degrees
-    50 : saves all data with elevation angles less than 10 degrees
+        :param isnr: integer.
+        SNR format. This tells the code what elevation angles to to save data for.
+        options:
+        66 (default) : (saves all data with elevation angles less than 30 degress
+        99 : saves all data with elevation angles between 5 and 30 degrees
+        88 : saves all data with elevation angles between 5 and 90 degrees
+        50 : saves all data with elevation angles less than 10 degrees
 
-    :param orb: string
-    Tells the code which orbit files to download.
-    options:
-    gps (defauly) : will use GPS broadcast orbit
-    gps+glos : will use JAXA orbits which have GPS and Glonass (usually available in 48 hours)
-    gnss : will use GFZ orbits, which is multi-GNSS (available in 3-4 days?)
-    nav : GPS broadcast, perfectly adequate for reflectometry.
-    igs : IGS precise, GPS only
-    igr : IGS rapid, GPS only
-    jax : JAXA, GPS + Glonass, within a few days, missing block III GPS satellites
-    gbm : GFZ Potsdam, multi-GNSS, not rapid
-    grg : French group, GPS, Galileo and Glonass, not rapid
-    esa : ESA, multi-GNSS
-    gfr : GFZ rapid, GPS, Galileo and Glonass, since May 17 2021
-    wum : (disabled) Wuhan, multi-GNSS, not rapid
+        :param orb: string
+        Tells the code which orbit files to download.
+        options:
+        gps (defauly) : will use GPS broadcast orbit
+        gps+glos : will use JAXA orbits which have GPS and Glonass (usually available in 48 hours)
+        gnss : will use GFZ orbits, which is multi-GNSS (available in 3-4 days?)
+        nav : GPS broadcast, perfectly adequate for reflectometry.
+        igs : IGS precise, GPS only
+        igr : IGS rapid, GPS only
+        jax : JAXA, GPS + Glonass, within a few days, missing block III GPS satellites
+        gbm : GFZ Potsdam, multi-GNSS, not rapid
+        grg : French group, GPS, Galileo and Glonass, not rapid
+        esa : ESA, multi-GNSS
+        gfr : GFZ rapid, GPS, Galileo and Glonass, since May 17 2021
+        wum : (disabled) Wuhan, multi-GNSS, not rapid
 
-    :param rate: string
-    low : standard rate data
-    high : high rate data
+        :param rate: string
+        low : standard rate data
+        high : high rate data
 
-    :param dec_rate: integer
-    decimation rate. 0 is default.
+        :param dec_rate: integer
+        decimation rate. 0 is default.
 
-    :param fortran: boolean
-    True : uses fortran to translate rinex
-    False : does not use fortran to translate rinex
+        :param fortran: boolean
+        True : uses fortran to translate rinex
+        False : does not use fortran to translate rinex
 
-    :param nolook: boolean
-    This parameter tells the code not to get the rinex files online if the files exist locally already.
+        :param nolook: boolean
+        This parameter tells the code not to get the rinex files online if the files exist locally already.
 
-    :param archive: string
-    options:
-    unavco
-    sonel (global sea level observing system)
-    sopac (Scripps Orbit and Permanent Array Center)
-    cddis
-    ngs (National Geodetic Survey)
-    nrcan (Natural Resources Canada)
-    bkg (German Agency for Cartography and Geodesy)
-    nz (GNS, New Zealand)
-    ga (Geoscience Australia)
-    bev (Austria Federal Office of Metrology and Surveying)
+        :param archive: string
+        options:
+        unavco
+        sonel (global sea level observing system)
+        sopac (Scripps Orbit and Permanent Array Center)
+        cddis
+        ngs (National Geodetic Survey)
+        nrcan (Natural Resources Canada)
+        bkg (German Agency for Cartography and Geodesy)
+        nz (GNS, New Zealand)
+        ga (Geoscience Australia)
+        bev (Austria Federal Office of Metrology and Surveying)
 
-    :param doy_end: int
-    end day of year
+        :param doy_end: int
+        end day of year
 
-    :param year_end: int
-    end year
+        :param year_end: int
+        end year
 
-    :param overwrite: boolean
-    make a new SNR file even if one already exists
+        :param overwrite: boolean
+        make a new SNR file even if one already exists
 
-    :param translator: string
-    fortran : uses fortran to translate (requires the fortran translator executable)
-    hybrid (default) : uses a combination of python and fortran to translate
-    python : uses python to translate. (This is very slow)
+        :param translator: string
+        fortran : uses fortran to translate (requires the fortran translator executable)
+        hybrid (default) : uses a combination of python and fortran to translate
+        python : uses python to translate. (This is very slow)
 
-    :param srate: int
-    sample rate for rinex 3 only
+        :param srate: int
+        sample rate for rinex 3 only
 
-    :return:
-    """
+        :return:
+        """
 
     #
     ns = len(station)
@@ -246,7 +247,7 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
     #print('plt argument', plt)
     if plt is True:
         lsp['plt_screen'] = True
-    elif plt is False:
+    else:
         lsp['plt_screen'] = False
 
     if delTmax is not None:
@@ -328,11 +329,28 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
 
     lsp['mmdd'] = add_mmddhhss
 
+    xdir = str(os.environ['REFL_CODE'])
+    picklefile = 'gpt_1wA.pickle'
+    pname = xdir + '/input/' + picklefile
+
+    if os.path.isfile(pname):
+        print('refraction file exists')
+    else:
+        local_copy = 'gnssrefl/' + picklefile
+        if os.path.isfile(local_copy):
+            print('found local copy of refraction file')
+            subprocess.call(['cp', '-f', local_copy, xdir + '/input/'])
+        else:
+            print('download and move refraction file')
+            url = 'https://github.com/kristinemlarson/gnssrefl/raw/master/gnssrefl/gpt_1wA.pickle'
+            wget.download(url, picklefile)
+            subprocess.call(['mv', '-f', picklefile, xdir + '/input/'])
+
     return {'args': {'station': station, 'year': year, 'doy': doy, 'snr_type': snr, 'extension': extension, 'lsp': lsp}, 'doy_end': doy_end, 'year_end': year_end}
 
 
-def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, nr2=None, peak2noise=2.7,
-              allfreq=None, xyz=None, refraction=None):
+def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, nr2=None, peak2noise=2.7, ampl=6.0,
+              allfreq=None, l1=None, l2c=None, xyz=None, refraction=None):
 
     NS = len(station)
     if (NS != 4):
@@ -342,6 +360,8 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
     if xyz == 'True':
         xyz = [lat, long, height]
         lat, long, height = g.xyz2llhd(xyz)
+
+    reqA = ampl
 
     lsp = {}
     lsp['station'] = station
@@ -381,10 +401,19 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
     if allfreq is None:
         # choose GPS as the default
         lsp['freqs'] = [1, 20, 5]
-        lsp['reqAmp'] = [6, 6, 6]
-    else:
+        lsp['reqAmp'] = [reqA, reqA,reqA]
+    elif allfreq is True:
         lsp['freqs'] = [1, 20, 5, 101, 102, 201, 205, 206, 207, 208, 302, 306]
-        lsp['reqAmp'] = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+        lsp['reqAmp'] = [reqA,reqA,reqA,reqA,reqA,reqA, reqA,reqA,reqA,reqA,reqA,reqA]
+
+    if l1 is True:
+        lsp['freqs'] = [1]
+        lsp['reqAmp'] = [reqA]
+
+    if l2c is True:
+        lsp['freqs'] = [20]
+        lsp['reqAmp'] = [reqA]
+
     # use refraction correction
     lsp['refraction'] = True
     if refraction == 'False':

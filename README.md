@@ -26,59 +26,63 @@ the repository and then run the command `git clone [https url]`
 To get the latest version of master or your own branch, use the git pull command.   
 
 ***
-
-### **Building the Docker image**
+### Build the docker image and running the container
 This repository includes a shell script that will set up the image and container for you. Once you give it executable permission, you can run:
 `./builder_docker.sh`
+
+This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
+
+To set up the docker image and container without the shell script, use the following instructions:
+#### **Building the Docker image**
 
 To do the build without the shell script:
 Navigate to the directory where the Dockerfile is stored and run... 
 
 `docker build --rm -t gnssir_jupyter/python .`
 
-#### Description of commands used
+Description of the commands used:
 * `--rm `: remove temporary images built
 * `-t` : tag/name the docker image 'event_response/python'
 * `.` : to build it in current directory
 
-### Run image as container
+#### Run image as container
 Prior to running the docker, make sure you do not have other jupyter notebooks running on 8888 or else it will not work properly. To open the jupyter notebook directly in the run command...
 
-`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v notebooks:/home/jovyan/gnssir_jupyter/notebooks -v bin:/home/jovyan/gnssir_jupyter/bin -v orbits:/home/jovyan/gnssir_jupyter/orbits -v gnssir_jupyter:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
 
-#### Description of commands used
+Description of the commands used:
 * `-it` : interactive process (shell)
 * `-p` : publish on port
 * `--name` : name of docker container
-* `-v` : sets up external volume (volume on your host computer), can set up multiple with multiple -v flags
 * `reference docker image`
 
-### Add your own directories as external volumes
+##### Add your own directories as external volumes
 If you want to add your own external volume add another `-v` command to the docker run command. You can add as many external volumes as you wish. All changes will be reflected on your host computer.
 
 `-v ~/[your_host_directory]:/home/jovyan/gnssir_jupyter/[personal_directory_name]`
 
-### Run image as container in detached mode
+#### Run image as container in detached mode
 If instead you wish to not run the container in the current terminal, then run the container in detached mode. To do this, add a `-d` to the docker run command...
 
-`docker run -it -d -p 8888:8888 --name='gnssir_jupyter_docker' -e GRANT_SUDO=yes --user root -v ~[path_to_local_repository]/notebooks:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -d -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v ~[path_to_local_repository]/notebooks:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
 
-### Execute Docker in terminal 
+#### Execute Docker in terminal 
 If your container is running and you need to enter the container (such as detached mode), then use the `docker exec` command to enter the container in a bash shell. 
 
 `docker exec -it gnssir_jupyter /bin/bash`
 
-#### Obtain Jupyter Notebook token
+##### Obtain Jupyter Notebook token
 From here you can obtain the token for the Jupyter Notebook by running the command `jupyter notebook list` to get the link and token to run the notebook in your browser. 
 
-### Stop container & rm container
+#### Stop container & rm container
 If you need to change your docker run command, exit out of jupyter notebook (Control-C), stop, and remove the container before running a new one.
 
 `docker stop gnssir_jupyter`
 
 `docker rm gnssir_jupyter`
 
-### Remove image
+#### Remove image
 If you need to rebuild the image, follow the previous steps to remove the container and then remove the image before trying to rebuild. 
 
 `docker image rm gnssir_jupyter/python`
