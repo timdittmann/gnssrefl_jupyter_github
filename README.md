@@ -29,7 +29,7 @@ To get the latest version of master or your own branch, use the git pull command
 
 ### **Building the Docker image**
 This repository includes a shell script that will set up the image and container for you. Once you give it executable permission, you can run:
-./builder_docker.sh
+`./builder_docker.sh`
 
 To do the build without the shell script:
 Navigate to the directory where the Dockerfile is stored and run... 
