@@ -14,14 +14,14 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
               nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid', srate=30):
     """
         rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
-        :param station: string. required parameter.
+        :station: string. required parameter.
 
-        :param year: integer. required parameter.
+        :year: integer. required parameter.
 
-        :param doy: integer. required parameter.
+        :doy: integer. required parameter.
         Day of year
 
-        :param isnr: integer.
+        :isnr: integer.
         SNR format. This tells the code what elevation angles to to save data for.
         options:
         66 (default) : (saves all data with elevation angles less than 30 degress
@@ -29,7 +29,7 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
         88 : saves all data with elevation angles between 5 and 90 degrees
         50 : saves all data with elevation angles less than 10 degrees
 
-        :param orb: string
+        :orb: string
         Tells the code which orbit files to download.
         options:
         gps (defauly) : will use GPS broadcast orbit
@@ -45,21 +45,21 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
         gfr : GFZ rapid, GPS, Galileo and Glonass, since May 17 2021
         wum : (disabled) Wuhan, multi-GNSS, not rapid
 
-        :param rate: string
+        :rate: string
         low : standard rate data
         high : high rate data
 
-        :param dec_rate: integer
+        :dec_rate: integer
         decimation rate. 0 is default.
 
-        :param fortran: boolean
+        :fortran: boolean
         True : uses fortran to translate rinex
         False : does not use fortran to translate rinex
 
-        :param nolook: boolean
+        :nolook: boolean
         This parameter tells the code not to get the rinex files online if the files exist locally already.
 
-        :param archive: string
+        :archive: string
         options:
         unavco
         sonel (global sea level observing system)
@@ -72,21 +72,21 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
         ga (Geoscience Australia)
         bev (Austria Federal Office of Metrology and Surveying)
 
-        :param doy_end: int
+        :doy_end: int
         end day of year
 
-        :param year_end: int
+        :year_end: int
         end year
 
-        :param overwrite: boolean
+        :overwrite: boolean
         make a new SNR file even if one already exists
 
-        :param translator: string
+        :translator: string
         fortran : uses fortran to translate (requires the fortran translator executable)
         hybrid (default) : uses a combination of python and fortran to translate
         python : uses python to translate. (This is very slow)
 
-        :param srate: int
+        :srate: int
         sample rate for rinex 3 only
 
         :return:

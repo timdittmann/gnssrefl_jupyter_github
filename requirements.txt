@@ -1,4 +1,6 @@
+jupyter
 numpy
 pandas
 seaborn
 gnssrefl
+python-dotenv
