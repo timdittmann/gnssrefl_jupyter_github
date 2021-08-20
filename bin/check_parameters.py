@@ -8,10 +8,12 @@ import matplotlib.pyplot as plt
 import gnssrefl.gps as g
 import gnssrefl.gnssir as guts
 import wget
+import pandas as pd
 
 
 def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
-              nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid', srate=30):
+              nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid',
+              srate=30, mk=False):
     """
         rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
         :station: string. required parameter.
@@ -190,6 +192,9 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
         print('please set fortran parameter to boolean True or False')
         sys.exit()
 
+    if mk is True:
+        print('you have invoked the Makan option')
+
     return {'station': station, 'year_list': year_list, 'doy_list': doy_list, 'isnr': isnr, 'orbtype': orb,
             'rate': rate, 'dec_rate': dec_rate, 'archive': archive, 'fortran': fortran, 'nol': nol,
             'overwrite': overwrite, 'translator': translator, 'srate': srate}
@@ -224,6 +229,28 @@ def quicklook(station, year, doy, snr=66, f=1, reqAmp=[7], e1=5, e2=25, h1=0.5, 
     return {'station': station, 'year': year, 'doy': doy, 'snr_type': snr, 'f': f, 'reqAmp': reqAmp, 'e1': e1,
             'e2': e2, 'minH': h1, 'maxH': h2, 'PkNoise': PkNoise, 'satsel': sat, 'fortran': fortran, 'pele': pele,
             'pltscreen': pltscreen}
+
+
+def quicklook_metrics(datakeys):
+    quadrants = ['NW', 'NE', 'SW', 'SE']
+
+    # re-organizing the data in a plotting friendly format
+    success_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
+    fail_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
+
+    for i, quadrant in enumerate(quadrants):
+        for j in datakeys[quadrant].keys():
+            success_data['Azimuth'].append(datakeys[quadrant][j][0])
+            success_data['Reflector Height'].append(datakeys[quadrant][j][1])
+            success_data['Peak to Noise'].append(datakeys[quadrant][j][5])
+            success_data['Amplitude'].append(datakeys[quadrant][j][4])
+        for k in datakeys[f'f{quadrant}'].keys():
+            fail_data['Azimuth'].append(datakeys[f'f{quadrant}'][k][0])
+            fail_data['Reflector Height'].append(datakeys[f'f{quadrant}'][k][1])
+            fail_data['Peak to Noise'].append(datakeys[f'f{quadrant}'][k][5])
+            fail_data['Amplitude'].append(datakeys[f'f{quadrant}'][k][4])
+
+    return pd.DataFrame(success_data), pd.DataFrame(fail_data)
 
 
 def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, doy_end=None, year_end=None,
@@ -317,7 +344,11 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
         #print('overriding frequency choices')
     if ampl is not None:
         #print('overriding amplitude choices')
-        lsp['reqAmp'] = [ampl]
+        dumA = ampl
+        # this is not elegant - but allows people to set ampl on the command line
+        # but use the frequency list from their json ...  which i think has max of 12
+        # but use 14 to be sure
+        lsp['reqAmp'] = [dumA for i in range(14)]
 
     if sat is not None:
         #print('overriding - only looking at a single satellite')
@@ -377,6 +408,10 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
         nr1 = h1
     if nr2 is None:
         nr2 = h2
+
+    if h1 > h2:
+        print(f'h1 ({h1}) cannot be greater than h2 ({h2}). Exiting.')
+        sys.exit()
 
     lsp['NReg'] = [nr1, nr2]
     lsp['PkNoise'] = peak2noise
