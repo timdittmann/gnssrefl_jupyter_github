@@ -70,7 +70,7 @@ def download_crx2rnx(system=None, path_to_executables=None):
     download_path = 'https://terras.gsi.go.jp/ja/crx2rnx/'
     try:
         # download the correct file from the site
-        print('downloading file')
+        print('downloading CRX2RNX file')
         urllib.request.urlretrieve(os.path.join(download_path, download_file), os.path.join(path_to_executables, download_file))
 
         # uncompress the file
@@ -82,7 +82,6 @@ def download_crx2rnx(system=None, path_to_executables=None):
         current_destination = os.path.join(path_to_executables, f'{downloaded_dir}/bin/CRX2RNX')
         os.replace(current_destination, os.path.join(path_to_executables, 'CRX2RNX'))
 
-        print('cleaning up')
         # cleanup and move the file where we need it
         os.remove(os.path.join(path_to_executables, download_file))
         shutil.rmtree(os.path.join(path_to_executables, downloaded_dir))

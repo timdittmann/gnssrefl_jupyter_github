@@ -9,11 +9,12 @@ import gnssrefl.gps as g
 import gnssrefl.gnssir as guts
 import wget
 import pandas as pd
+import re
 
 
 def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
               nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid',
-              srate=30, mk=False):
+              srate=30, mk=False, weekly=False):
     """
         rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
         :station: string. required parameter.
@@ -154,7 +155,13 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
     else:
         year2 = year_end
 
-    doy_list = list(range(doy, doy2 + 1))
+    # the weekly option
+    skipit = 1
+    if weekly is True:
+        print('you have invoked the weekly option')
+        skipit = 7
+
+    doy_list = list(range(doy, doy2 + 1, skipit))
     year_list = list(range(year1, year2 + 1))
 
     if overwrite == 'True':
@@ -481,6 +488,23 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
     print('writing out to:', outputfile)
     with open(outputfile, 'w+') as outfile:
         json.dump(lsp, outfile, indent=4)
+
+
+def read_allrh_file(filepath):
+    regex = '^ (?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+)'
+    data = {'dates': [], 'rh': []}
+    # read daily average reflector heights
+    with open(filepath, 'r') as myfile:
+        file = myfile.read()
+        matches = re.finditer(regex, file, flags=re.MULTILINE)
+
+        for match in matches:
+            ydoy = f'{int(match.group("year"))}-{int(match.group("doy"))}'
+            date = datetime.datetime.strptime(ydoy, '%Y-%j').date()
+            data['dates'].append(date)
+            data['rh'].append(float(match.group('rh')))
+
+    return data
 
 
 def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, extension='', year1=2005, year2=2021, fr=0, csv=False):
