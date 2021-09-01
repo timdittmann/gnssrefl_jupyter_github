@@ -19,7 +19,7 @@ def check_environment():
     return environment_set
 
 
-def set_environment(orbits='../orbits', refl_code='..', exe='../bin/exe'):
+def set_environment(orbits='../../orbits', refl_code='../..', exe='../../bin/exe'):
     os.environ['ORBITS'] = os.path.abspath(os.path.join(orbits))
     os.environ['REFL_CODE'] = os.path.abspath(os.path.join(refl_code))
     os.environ['EXE'] = os.path.abspath(os.path.join(exe))

@@ -30,7 +30,7 @@ To get the latest version of master or your own branch, use the git pull command
 ### Step 3. Build the docker image and running the container
 #### option 1:
 This repository includes a shell script that will set up the image and container for you. Once you give it executable permission, you can run:
-`./builder_docker.sh`
+`./build_docker.sh`
 
 This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
 The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.

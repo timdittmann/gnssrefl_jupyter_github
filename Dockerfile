@@ -39,7 +39,8 @@ RUN pip install --quiet --no-cache-dir --requirement /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-COPY notebooks/* /home/jovyan/gnssir_jupyter/notebooks/
+COPY notebooks/homework/* /home/jovyan/gnssir_jupyter/notebooks/homework/
+COPY notebooks/use-cases/* /home/jovyan/gnssir_jupyter/notebooks/use-cases/
 
 # Start the jupyter notebook upon executuion
-ENTRYPOINT ["jupyter", "notebook", "--no-browser", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssir_jupyter"]
+ENTRYPOINT ["jupyter", "notebook", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssir_jupyter"]
