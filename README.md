@@ -24,7 +24,7 @@ To clone a repository onto your local machine using the HTTPS link, click on the
 repository and copy the link that says 'Clone with HTTPS'. Using your terminal, navigate to where you would like to clone 
 the repository and then run the command `git clone [https url]`
 
-To get the latest version of master or your own branch, use the git pull command.   
+To get the latest version of master or your own branch,  use the git pull command from inside the now-local repository.   
 
 ***
 ### Step 3. Build the docker image and running the container
@@ -92,6 +92,18 @@ If you need to rebuild the image, follow the previous steps to remove the contai
 ## Use Notebooks without Docker
 If you do not wish to use the docker container, then you can run Jupyter notebook using your local Python 3 environment.
 
+
+**NOTE** this setup requires system dependencies: **gcc** and **gfortran**.
+
+To install:
+* if you are using a LINUX then simply run `apt-get install -y gcc` and `apt-get install -y gcc` in your terminal.
+* if you are using a MacOS then you will need to install xcode. First, in your terminal, check if you have xcode by `xcode-select -p`. 
+If it is installed, it should return a path. If it is not installed then run `xcode-select --install`. 
+This should install gcc.You can check if you have gcc by `gcc --version`. Check if you have gfortran by `gfortran --version`.
+If you do not have gfortran, then you can use homebrew to install, if you have it `brew install gfortran`. 
+If you don't have homebrew, then see [here](https://gcc.gnu.org/wiki/GFortranBinariesMacOS).
+
+If you are still experiencing trouble then it is recommended you try the docker version of these notebooks. See above.
 ### Clone the Git Repository to your local machine 
 For instructions on how to install git on any OS: https://github.com/git-guides/install-git
 
@@ -103,7 +115,7 @@ To clone a repository onto your local machine using the HTTPS link, click on the
 repository and copy the link that says 'Clone with HTTPS'. Using your terminal, navigate to where you would like to clone 
 the repository and then run the command `git clone [https url]`
 
-To get the latest version of master or your own branch, use the git pull command.   
+To get the latest version of master or your own branch, use the git pull command from inside the now-local repository.   
 
 ### pip install requirements
 To install all the required python packages, use pip to install the requirements.txt file. 
