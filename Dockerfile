@@ -5,7 +5,7 @@
 # For more information... https://hub.docker.com/r/jupyter/scipy-notebook/dockerfile
 
 FROM jupyter/scipy-notebook
-WORKDIR /home/jovyan/gnssir_jupyter
+WORKDIR /home/jovyan/gnssrefl_jupyter
 
 MAINTAINER = UNAVCO Inc.
 
@@ -17,18 +17,22 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # COPY the bin folder (code that should not be edited by the user) into the docker
-COPY --chown=$NB_UID:users /bin /home/jovyan/gnssir_jupyter/bin
-RUN chmod +x /home/jovyan/gnssir_jupyter/bin/*
-ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssir_jupyter/bin"
+COPY --chown=$NB_UID:users /bin /home/jovyan/gnssrefl_jupyter/bin
+RUN chmod +x /home/jovyan/gnssrefl_jupyter/bin/*
+ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssrefl_jupyter/bin"
 
 # Copy the data directory
-COPY --chown=$NB_UID:users /data /home/jovyan/gnssir_jupyter/data
-RUN chmod +x /home/jovyan/gnssir_jupyter/data/*
-ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssir_jupyter/data"
+COPY --chown=$NB_UID:users /data /home/jovyan/gnssrefl_jupyter/data
+RUN chmod +x /home/jovyan/gnssrefl_jupyter/data/*
+ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssrefl_jupyter/data"
 
 # Copy the orbits directory
-COPY --chown=$NB_UID:users /orbits /home/jovyan/gnssir_jupyter/orbits
-ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssir_jupyter/orbits"
+COPY --chown=$NB_UID:users /orbits /home/jovyan/gnssrefl_jupyter/orbits
+ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssrefl_jupyter/orbits"
+
+ENV ORBITS=/home/jovyan/gnssrefl_jupyter/orbits
+ENV REFL_CODE=/home/jovyan/gnssrefl_jupyter
+ENV EXE=/home/jovyan/gnssrefl_jupyter/bin/exe
 
 # Change user to default jupyter user (from jupyter/scipy-notebook Dockerfile)
 USER $NB_UID
@@ -39,8 +43,10 @@ RUN pip install --quiet --no-cache-dir --requirement /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-COPY notebooks/homework/* /home/jovyan/gnssir_jupyter/notebooks/homework/
-COPY notebooks/use-cases/* /home/jovyan/gnssir_jupyter/notebooks/use-cases/
+RUN mkdir Files
+
+COPY notebooks/homework/* /home/jovyan/gnssrefl_jupyter/notebooks/homework/
+COPY notebooks/use-cases/* /home/jovyan/gnssrefl_jupyter/notebooks/use-cases/
 
 # Start the jupyter notebook upon executuion
-ENTRYPOINT ["jupyter", "notebook", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssir_jupyter"]
+ENTRYPOINT ["jupyter", "notebook", "--ip=*", "--allow-root", "--notebook-dir=/home/jovyan/gnssrefl_jupyter"]

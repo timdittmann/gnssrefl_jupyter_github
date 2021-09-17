@@ -1,3 +1,0 @@
-ORBITS=/home/jovyan/gnssir_jupyter/orbits
-EXE=/home/jovyan/gnssir_jupyter/bin/exe
-REFL_CODE=/home/jovyan/gnssir_jupyter

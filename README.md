@@ -1,9 +1,21 @@
 # GNSS Reflectometry Jupyter Stack
 
-Jupyter Notebooks for the GNSS interferometric reflectometry python package hosted at https://github.com/kristinemlarson/gnssrefl
+Jupyter Notebooks for the [GNSS interferometric reflectometry](https://github.com/kristinemlarson/gnssrefl) python package.
 
-## Use Notebooks with Docker Container
-### Step 1. Install Docker 
+##Options for installation:
+* Option I: [Use Notebooks with Docker Container](#Docker)
+    * Step 1: [Install Docker](#Install Docker)
+    * Step 2: Build Docker Image and Run Container
+        * Option 1: [Use Dockerhub](#Dockerhub) (RECOMMENDED)
+        * Option 2: [Use git repository with bash script](#Docker Git Bash)
+        * Option 3: [Use git repository and run manual docker commands](#Docker Git Commands)
+* Option II: [Use Notebooks with local Python build](#Local)
+
+## Use Notebooks with Docker Container (Recommended method) <a name="Docker"></a>
+See [here](#Docker Git info) for additional helpful commands for containers.
+***
+
+### Step 1. Install Docker <a name="Install Docker"></a>
 &ensp;&ensp; Pick your system and follow instructions on the Docker website. 
 * **Mac** - https://docs.docker.com/docker-for-mac/install/ 
 * **Windows** - https://docs.docker.com/docker-for-windows/install/ 
@@ -13,9 +25,37 @@ Jupyter Notebooks for the GNSS interferometric reflectometry python package host
 
 More information on [getting started, testing your installation, and developing.](https://docs.docker.com/get-started/) 
 
-### Step 2. Clone the Git Repository to your local machine 
-For instructions on how to install git on any OS: https://github.com/git-guides/install-git
+###  Step 2. 
 
+***
+
+#### Option 1: build and run docker container using dockerhub <a name="Dockerhub"></a>
+Navigate to the directory where you would like to have output data stored. 
+Note that the code will create a directory called Files where the final data will be stored for you locally.
+
+Then run:
+`docker run -it -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes --user root --restart=unless-stopped unavdocker/gnssrefl_jupyter:latest`
+
+Description of the commands used:
+* `-it` : interactive process (shell)
+* `-v` : external volume. All changes will be reflected on your host computer.
+* `-p` : publish on port
+* `--name` : name of docker container
+* `-e` : granting sudo permissions
+* `--user` : setting the user
+* `reference dockerhub image` : This will build the dockerhub image if it doesn't already exist.
+
+
+This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
+
+DONE - Below are other options for installation.
+***
+
+#### Option 2: Build image and run container using git repository with bash script <a name="Docker Git Bash"></a>
+
+##### Step 1. Clone the Git Repository to your local machine <a name="Git"></a>
+For instructions on how to install git on any OS: https://github.com/git-guides/install-git
 Use the HTTPS link in this repository to clone the repository to your local machine. You may do this in a terminal 
 using git or use a git client ([Fork](https://git-fork.com/), etc...) You will want to do this in a location on your local computer that you 
 wish to store the repository.
@@ -26,21 +66,26 @@ the repository and then run the command `git clone [https url]`
 
 To get the latest version of master or your own branch,  use the git pull command from inside the now-local repository.   
 
-***
-### Step 3. Build the docker image and running the container
-#### option 1:
-This repository includes a shell script that will set up the image and container for you. Once you give it executable permission, you can run:
+##### Step 2. Build the docker image and run the container using the bash script in this repository
+This repository includes a shell script that will set up the image and container for you. Then run:
 `./build_docker.sh`
+
+(you may need to give this file executable permission: `chmod +x build_docker.sh`)
 
 This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
 The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
-#### option 2:
-To set up the docker image and container without the shell script, use the following instructions:
+
+DONE - Below are other options for installation.
+
+***
+
+#### Option 3: Build image and run container using git repository with docker commadns <a name="Docker Git Commands"></a>
+To set up the docker image and container use the following instructions:
+##### Step 1. [Clone the Git Repository to your local machine](#Git) (see above)
 ##### **Build the Docker image**
+Navigate to the directory where the Dockerfile from this repository is stored and run... 
 
-Navigate to the directory where the Dockerfile is stored and run... 
-
-`docker build --rm -t gnssir_jupyter/python .`
+`docker build --rm -t gnssrefl_jupyter .`
 
 Description of the commands used:
 * `--rm `: remove temporary images built
@@ -50,25 +95,36 @@ Description of the commands used:
 ##### Run image as container
 Prior to running the docker, make sure you do not have other jupyter notebooks running on 8888 or else it will not work properly. To open the jupyter notebook directly in the run command...
 
-`docker run -it -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes --user root --restart=unless-stopped gnssrefl_jupyter`
 
 Description of the commands used:
 * `-it` : interactive process (shell)
+* `-v` : external volume. All changes will be reflected on your host computer.
 * `-p` : publish on port
 * `--name` : name of docker container
+* `-e` : granting sudo permissions
+* `--user` : setting the user
 * `reference docker image`
 
-The following are additional commands that are optional:
+This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
+
+DONE.
+
+***
+
+#### Additional information for running a docker container: <a name="Docker Git info"></a>
+The following are additional docker commands that are optional:
 
 ##### (optional) Add your own directories as external volumes
 If you want to add your own external volume add another `-v` command to the docker run command. You can add as many external volumes as you wish. All changes will be reflected on your host computer.
 
-`-v ~/[your_host_directory]:/home/jovyan/gnssir_jupyter/[personal_directory_name]`
+`-v ~/[your_host_directory]:/home/jovyan/gnssrefl_jupyter/[personal_directory_name]`
 
 ##### (optional) Run image as container in detached mode
 If instead you wish to not run the container in the current terminal, then run the container in detached mode. To do this, add a `-d` to the docker run command...
 
-`docker run -it -d -p 8888:8888 --name='gnssir_jupyter' -e GRANT_SUDO=yes --user root -v ~[path_to_local_repository]/notebooks:/home/jovyan/gnssir_jupyter --env-file gnssir_env.txt --restart=unless-stopped gnssir_jupyter/python`
+`docker run -it -d -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes --user root -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files --restart=unless-stopped gnssrefl_jupyter`
 
 If your container is running and you need to enter the container (such as detached mode), then use the `docker exec` command to enter the container in a bash shell. 
 
@@ -76,20 +132,20 @@ If your container is running and you need to enter the container (such as detach
 
 From here you can obtain the token for the Jupyter Notebook by running the command `jupyter notebook list` to get the link and token to run the notebook in your browser. 
 
-#### Stop container & rm container
+#### Stop container and remove container
 If you need to change your docker run command, exit out of jupyter notebook (Control-C), stop, and remove the container before running a new one.
 
-`docker stop gnssir_jupyter`
+`docker stop gnssrefl_jupyter`
 
-`docker rm gnssir_jupyter`
+`docker rm gnssrefl_jupyter`
 
 #### Remove image
 If you need to rebuild the image, follow the previous steps to remove the container and then remove the image before trying to rebuild. 
 
-`docker image rm gnssir_jupyter/python`
+`docker image rm gnssrefl_jupyter`
 
 ***
-## Use Notebooks without Docker
+## Use Notebooks without Docker <a name="Local"></a>
 If you do not wish to use the docker container, then you can run Jupyter notebook using your local Python 3 environment.
 
 
