@@ -4,6 +4,9 @@ import platform
 import shutil
 import urllib.request
 import tarfile
+import datetime
+import pandas as pd
+import re
 
 
 def check_environment():
@@ -94,3 +97,40 @@ def download_crx2rnx(system=None, path_to_executables=None):
         sys.exit()
 
 
+def read_allrh_file(filepath):
+    regex = '^ (?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+)'
+    data = {'dates': [], 'rh': []}
+    # read daily average reflector heights
+    with open(filepath, 'r') as myfile:
+        file = myfile.read()
+        matches = re.finditer(regex, file, flags=re.MULTILINE)
+
+        for match in matches:
+            ydoy = f'{int(match.group("year"))}-{int(match.group("doy"))}'
+            date = datetime.datetime.strptime(ydoy, '%Y-%j').date()
+            data['dates'].append(date)
+            data['rh'].append(float(match.group('rh')))
+
+    return data
+
+
+def quicklook_metrics(datakeys):
+    quadrants = ['NW', 'NE', 'SW', 'SE']
+
+    # re-organizing the data in a plotting friendly format
+    success_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
+    fail_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
+
+    for i, quadrant in enumerate(quadrants):
+        for j in datakeys[quadrant].keys():
+            success_data['Azimuth'].append(datakeys[quadrant][j][0])
+            success_data['Reflector Height'].append(datakeys[quadrant][j][1])
+            success_data['Peak to Noise'].append(datakeys[quadrant][j][5])
+            success_data['Amplitude'].append(datakeys[quadrant][j][4])
+        for k in datakeys[f'f{quadrant}'].keys():
+            fail_data['Azimuth'].append(datakeys[f'f{quadrant}'][k][0])
+            fail_data['Reflector Height'].append(datakeys[f'f{quadrant}'][k][1])
+            fail_data['Peak to Noise'].append(datakeys[f'f{quadrant}'][k][5])
+            fail_data['Amplitude'].append(datakeys[f'f{quadrant}'][k][4])
+
+    return pd.DataFrame(success_data), pd.DataFrame(fail_data)

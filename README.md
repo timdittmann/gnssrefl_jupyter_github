@@ -100,8 +100,8 @@ To install:
 * if you are using a MacOS then you will need to install xcode. First, in your terminal, check if you have xcode by `xcode-select -p`. 
 If it is installed, it should return a path. If it is not installed then run `xcode-select --install`. 
 This should install gcc.You can check if you have gcc by `gcc --version`. Check if you have gfortran by `gfortran --version`.
-If you do not have gfortran, then you can use homebrew to install, if you have it `brew install gfortran`. 
-If you don't have homebrew, then see [here](https://gcc.gnu.org/wiki/GFortranBinariesMacOS).
+If you do not have gfortran, then follow instructions to install for your system [here](https://gcc.gnu.org/wiki/GFortranBinariesMacOS) for MacOS 
+and [here](https://gcc.gnu.org/wiki/GFortranBinaries) for Linux.
 
 If you are still experiencing trouble then it is recommended you try the docker version of these notebooks. See above.
 ### Clone the Git Repository to your local machine 

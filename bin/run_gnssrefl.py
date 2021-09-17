@@ -7,98 +7,123 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gnssrefl.gps as g
 import gnssrefl.gnssir as guts
+import gnssrefl.rinex2snr as r2s
+import gnssrefl.quickLook_function as q_func
 import wget
-import pandas as pd
-import re
 
 
-def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
+def rinex2snr(station, year, doy, snr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
               nolook=False, archive=None, doy_end=None, year_end=None, overwrite=None, translator='hybrid',
               srate=30, mk=False, weekly=False):
     """
-        rinex2snr translates a RINEX files to an SNR format. This function will fetch orbit files for you.
-        :station: string. required parameter.
+        rinex2snr translates RINEX files to an SNR format. This function will fetch orbit files for you.
 
-        :year: integer. required parameter.
+        Parameters:
+        ___________
+        station : string
+            4 or 9 character ID of the station
 
-        :doy: integer. required parameter.
-        Day of year
+        year : integer
+            Year
 
-        :isnr: integer.
-        SNR format. This tells the code what elevation angles to to save data for.
-        options:
-        66 (default) : (saves all data with elevation angles less than 30 degress
-        99 : saves all data with elevation angles between 5 and 30 degrees
-        88 : saves all data with elevation angles between 5 and 90 degrees
-        50 : saves all data with elevation angles less than 10 degrees
+        doy : integer
+            Day of year
 
-        :orb: string
-        Tells the code which orbit files to download.
-        options:
-        gps (defauly) : will use GPS broadcast orbit
-        gps+glos : will use JAXA orbits which have GPS and Glonass (usually available in 48 hours)
-        gnss : will use GFZ orbits, which is multi-GNSS (available in 3-4 days?)
-        nav : GPS broadcast, perfectly adequate for reflectometry.
-        igs : IGS precise, GPS only
-        igr : IGS rapid, GPS only
-        jax : JAXA, GPS + Glonass, within a few days, missing block III GPS satellites
-        gbm : GFZ Potsdam, multi-GNSS, not rapid
-        grg : French group, GPS, Galileo and Glonass, not rapid
-        esa : ESA, multi-GNSS
-        gfr : GFZ rapid, GPS, Galileo and Glonass, since May 17 2021
-        wum : (disabled) Wuhan, multi-GNSS, not rapid
+        snr : integer, optional
+            SNR format. This tells the code what elevation angles to save data for. Will be the snr file ending.
+            value options:
+                66 (default) : saves all data with elevation angles less than 30 degress
+                99 : saves all data with elevation angles between 5 and 30 degrees
+                88 : saves all data with elevation angles between 5 and 90 degrees
+                50 : saves all data with elevation angles less than 10 degrees
 
-        :rate: string
-        low : standard rate data
-        high : high rate data
+        orb : string, optional
+            Which orbit files to download.
+            value options:
+            gps (default) : will use GPS broadcast orbit
+            gps+glos : will use JAXA orbits which have GPS and Glonass (usually available in 48 hours)
+            gnss : will use GFZ orbits, which is multi-GNSS (available in 3-4 days?)
+            nav : GPS broadcast, perfectly adequate for reflectometry.
+            igs : IGS precise, GPS only
+            igr : IGS rapid, GPS only
+            jax : JAXA, GPS + Glonass, within a few days, missing block III GPS satellites
+            gbm : GFZ Potsdam, multi-GNSS, not rapid
+            grg : French group, GPS, Galileo and Glonass, not rapid
+            esa : ESA, multi-GNSS
+            gfr : GFZ rapid, GPS, Galileo and Glonass, since May 17 2021
+            wum : (disabled) Wuhan, multi-GNSS, not rapid
 
-        :dec_rate: integer
-        decimation rate. 0 is default.
+        rate : string, optional
+            The data rate
+            value options:
+                low (default) : standard rate data
+                high : high rate data
 
-        :fortran: boolean
-        True : uses fortran to translate rinex
-        False : does not use fortran to translate rinex
+        dec_rate : integer, optional
+            Decimation rate. 0 is default.
 
-        :nolook: boolean
-        This parameter tells the code not to get the rinex files online if the files exist locally already.
+        fortran : boolean, optional
+            Whether to use fortran to translate the rinex files. Note: This option requires Fortran RINEX translators.
+            Please see documentation at https://github.com/kristinemlarson/gnssrefl to see instructions to get these.
+            value options:
+                False (default) : does not use fortran to translate rinex
+                True : uses fortran to translate rinex
 
-        :archive: string
-        options:
-        unavco
-        sonel (global sea level observing system)
-        sopac (Scripps Orbit and Permanent Array Center)
-        cddis
-        ngs (National Geodetic Survey)
-        nrcan (Natural Resources Canada)
-        bkg (German Agency for Cartography and Geodesy)
-        nz (GNS, New Zealand)
-        ga (Geoscience Australia)
-        bev (Austria Federal Office of Metrology and Surveying)
+        nolook : boolean, optional
+            This parameter tells the code not to get the rinex files online if the files exist locally already.
+            default is False.
 
-        :doy_end: int
-        end day of year
+        archive : string, optional
+            Select which archive to get the files from.
+            Default is None. None means that the code will search and find an archive with the data for you.
+                value options:
+                unavco
+                sonel (global sea level observing system)
+                sopac (Scripps Orbit and Permanent Array Center)
+                cddis
+                ngs (National Geodetic Survey)
+                nrcan (Natural Resources Canada)
+                bkg (German Agency for Cartography and Geodesy)
+                nz (GNS, New Zealand)
+                ga (Geoscience Australia)
+                bev (Austria Federal Office of Metrology and Surveying)
 
-        :year_end: int
-        end year
+        doy_end : int, optional
+            end day of year. This is to create a range from doy to doy_end of days to get the snr files.
+            If year_end parameter is used - then day_end will end in the day of the year_end.
+            Default is None. (meaning only a single day using the doy parameter)
 
-        :overwrite: boolean
-        make a new SNR file even if one already exists
+        year_end : int, optional
+            end year. This is to create a range from year to year_end to get the snr files for more than one year.
+            Default is None.
 
-        :translator: string
-        fortran : uses fortran to translate (requires the fortran translator executable)
-        hybrid (default) : uses a combination of python and fortran to translate
-        python : uses python to translate. (This is very slow)
+        overwrite : boolean, optional
+            Make a new SNR file even if one already exists (overwrite existing file).
+            Default is False.
 
-        :srate: int
-        sample rate for rinex 3 only
+        translator : string, optional
+            hybrid (default) : uses a combination of python and fortran to translate the files.
+            fortran : uses fortran to translate (requires the fortran translator executable - see https://github.com/kristinemlarson/gnssrefl)
+            python : uses python to translate. (Warning: This can be very slow)
 
-        :return:
+        srate : int, optional
+            sample rate for rinex 3 only
+            Default is 30.
+
+        mk : boolean, optional
+            The Makan option. Use True for uppercase station names.
+            Default is False.
+
+        weekly : boolean, optional
+            Takes 1 out of every 7 days in the doy-doy_end range (one file per week) - used to save time.
+            Default is False.
+
         """
 
     #
     ns = len(station)
-    if (ns == 4) or (ns == 9):
-        station = station
+    if ns == 4 or ns == 9:
+        station = station.lower()
         #print('You have submitted a nominally valid station name')
     else:
         print('Illegal input - Station name must have 4 or 9 characters. Exiting.')
@@ -161,13 +186,8 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
         print('you have invoked the weekly option')
         skipit = 7
 
-    doy_list = list(range(doy, doy2 + 1, skipit))
+    doy_list = [doy, doy2]
     year_list = list(range(year1, year2 + 1))
-
-    if overwrite == 'True':
-        overwrite = True
-    else:
-        overwrite = False
 
     if translator == 'fortran':
         fortran = True
@@ -202,23 +222,94 @@ def rinex2snr(station, year, doy, isnr=66, orb='nav', rate='low', dec_rate=0, fo
     if mk is True:
         print('you have invoked the Makan option')
 
-    return {'station': station, 'year_list': year_list, 'doy_list': doy_list, 'isnr': isnr, 'orbtype': orb,
+    args = {'station': station, 'year_list': year_list, 'doy_list': doy_list, 'isnr': snr, 'orbtype': orb,
             'rate': rate, 'dec_rate': dec_rate, 'archive': archive, 'fortran': fortran, 'nol': nol,
-            'overwrite': overwrite, 'translator': translator, 'srate': srate}
+            'overwrite': overwrite, 'translator': translator, 'srate': srate, 'mk': mk, 'skipit': skipit}
+
+    r2s.run_rinex2snr(**args)
 
 
 def quicklook(station, year, doy, snr=66, f=1, reqAmp=[7], e1=5, e2=25, h1=0.5, h2=6, sat=None,
-              PkNoise=3, fortran=True, pltscreen=False):
+              PkNoise=3, pltscreen=False):
+    """
+
+        Parameters:
+        ___________
+        station : string
+            4 or 9 character ID of the station
+
+        year : integer
+            Year
+
+        doy : integer
+            Day of year
+
+        snr : integer, optional
+            SNR format. This tells the code what elevation angles to save data for. Will be the snr file ending.
+            value options:
+                66 (default) : saves all data with elevation angles less than 30 degress
+                99 : saves all data with elevation angles between 5 and 30 degrees
+                88 : saves all data with elevation angles between 5 and 90 degrees
+                50 : saves all data with elevation angles less than 10 degrees
+        f : integer, optional
+            GNSS frequency.
+            value options:
+                1 (default) : GPS L1
+                2 : GPS L2
+                20 : GPS L2C
+                5 : GPS L5
+                101 : GLONASS L1
+                102 : GLONASS L2
+                201 : GALILEO E1
+                205 : GALILEO E5a
+                206 : GALILEO E6
+                207 : GALILEO E5b
+                208 : GALILEO E5
+                302 : BEIDOU B1
+                306 : BEIDOU B3
+                307 : BEIDOU B2
+
+            reqAmp : array_like, optional
+                Lomb-Scargle Periodogram (LSP) amplitude significance criterion in volts/volts.
+                Default is [7].
+
+            e1 : integer, optional
+                elevation angle lower limit in degrees for the LSP.
+                default is 5.
+
+            e2: integer, optional
+                elevation angle upper limit in degrees for the LSP.
+                default is 25.
+
+            h1 : float, optional
+                The allowed LSP reflector height lower limit in meters.
+                default is 0.5.
+
+            h2 : float, optional
+                The allowed LSP reflector height upper limit in meters.
+                default is 6.
+
+            sat : array_like, optional
+                list of satellites numbers
+                default is None.
+                array items: integer
+
+            PkNoise : integer, optional
+                 peak to noise ratio of the periodogram values (periodogram peak divided by the periodogram noise).
+                 default is 3.
+
+            pltscreen : boolean, optional
+                Print quicklook plots to screen. False for values only.
+                Default is False.
+    """
+
     if len(str(year)) != 4:
         print('Year must have four characters: ', year)
         sys.exit()
 
-    exitS = g.check_inputs(station, year, doy, snr)
+    exitS = g.check_inputs(station.lower(), year, doy, snr)
 
     if exitS:
-        sys.exit()
-
-    if type(fortran) is not bool:
         sys.exit()
 
     # set some reasonable default values for LSP (Reflector Height calculation).
@@ -233,36 +324,126 @@ def quicklook(station, year, doy, snr=66, f=1, reqAmp=[7], e1=5, e2=25, h1=0.5, 
         print('this restriction is for quickLook only ')
         pele[0] = e1
 
-    return {'station': station, 'year': year, 'doy': doy, 'snr_type': snr, 'f': f, 'reqAmp': reqAmp, 'e1': e1,
-            'e2': e2, 'minH': h1, 'maxH': h2, 'PkNoise': PkNoise, 'satsel': sat, 'fortran': fortran, 'pele': pele,
+    args = {'station': station.lower(), 'year': year, 'doy': doy, 'snr_type': snr, 'f': f, 'reqAmp': reqAmp, 'e1': e1,
+            'e2': e2, 'minH': h1, 'maxH': h2, 'PkNoise': PkNoise, 'satsel': sat, 'fortran': None, 'pele': pele,
             'pltscreen': pltscreen}
 
+    values, metrics = q_func.quickLook_function(**args)
 
-def quicklook_metrics(datakeys):
-    quadrants = ['NW', 'NE', 'SW', 'SE']
+    return values, metrics
 
-    # re-organizing the data in a plotting friendly format
-    success_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
-    fail_data = {'Azimuth': [], 'Reflector Height': [], 'Peak to Noise': [], 'Amplitude': []}
-
-    for i, quadrant in enumerate(quadrants):
-        for j in datakeys[quadrant].keys():
-            success_data['Azimuth'].append(datakeys[quadrant][j][0])
-            success_data['Reflector Height'].append(datakeys[quadrant][j][1])
-            success_data['Peak to Noise'].append(datakeys[quadrant][j][5])
-            success_data['Amplitude'].append(datakeys[quadrant][j][4])
-        for k in datakeys[f'f{quadrant}'].keys():
-            fail_data['Azimuth'].append(datakeys[f'f{quadrant}'][k][0])
-            fail_data['Reflector Height'].append(datakeys[f'f{quadrant}'][k][1])
-            fail_data['Peak to Noise'].append(datakeys[f'f{quadrant}'][k][5])
-            fail_data['Amplitude'].append(datakeys[f'f{quadrant}'][k][4])
-
-    return pd.DataFrame(success_data), pd.DataFrame(fail_data)
 
 
 def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, doy_end=None, year_end=None,
-           azim1=0, azim2=360, nooverwrite=None, extension='', compress=None, screenstats=True, delTmax=None, e1=None,
-           e2=None, mmdd=None):
+           azim1=0, azim2=360, nooverwrite=True, extension='', compress=False, screenstats=True, delTmax=None, e1=None,
+           e2=None, mmdd=False):
+    """
+        This is the main driver for running GNSS Interferometric Reflectometry.
+
+        parameters:
+        ___________
+        station : string
+            4 or 9 character ID of the station
+
+        year : integer
+            Year
+
+        doy : integer
+            Day of year
+
+        snr : integer, optional
+            SNR format. This tells the code what elevation angles to save data for. Will be the snr file ending.
+            value options:
+                66 (default) : saves all data with elevation angles less than 30 degress
+                99 : saves all data with elevation angles between 5 and 30 degrees
+                88 : saves all data with elevation angles between 5 and 90 degrees
+                50 : saves all data with elevation angles less than 10 degrees
+
+        plt : boolean, optional
+            Send plots to screen or not.
+            Default is False.
+
+        fr : integer, optional
+            GNSS frequency.
+            value options:
+                1 (default) : GPS L1
+                2 : GPS L2
+                20 : GPS L2C
+                5 : GPS L5
+                101 : GLONASS L1
+                102 : GLONASS L2
+                201 : GALILEO E1
+                205 : GALILEO E5a
+                206 : GALILEO E6
+                207 : GALILEO E5b
+                208 : GALILEO E5
+                302 : BEIDOU B1
+                306 : BEIDOU B3
+                307 : BEIDOU B2
+
+        ampl : float, optional
+            minimum spectral peak amplitude.
+            default is None
+
+        sat : integer, optional
+            satellite number to only look at that single satellite.
+            default is None.
+
+        doy_end : int, optional
+            end day of year. This is to create a range from doy to doy_end of days.
+            If year_end parameter is used - then day_end will end in the day of the year_end.
+            Default is None. (meaning only a single day using the doy parameter)
+
+        year_end : int, optional
+            end year. This is to create a range from year to year_end to get the snr files for more than one year.
+            doy_end will be for year_end.
+            Default is None.
+
+        azim1 : integer, optional
+            lower limit azimuth.
+            If the azimuth angles are changed in the json (using 'azval' key) and not here, then the json overrides these.
+            If changed here, then it overrides what you requested in the json.
+            default is 0.
+
+        azim2 : integer, optional
+            upper limit azimuth.
+            If the azimuth angles are changed in the json (using 'azval' key) and not changed here, then the json overrides these.
+            If changed here, then it overrides what you requested in the json.
+            default is 360.
+
+        nooverwrite : boolean, optional
+            Use to overwrite files or not.
+            Default is True (overwrite files).
+
+        extension : string, optional
+            extension for result file, useful for testing strategies.
+            default is ''. (empty string)
+
+        compress : boolean, optional
+            xz compress SNR files after use.
+            default is False.
+
+        screenstats : boolean, optional
+            whether to print stats to the screen or not.
+            default is True.
+
+        delTmax : integer, optional
+            satellite arc length in minutes.
+            default is None.
+
+        e1 : float, optional
+            use to override the minimum elevation angle.
+            default is None.
+
+        e2 : float, optional
+            use to override the maximum elevation angle.
+            default is None.
+
+        mmdd : boolean, optional
+            adds columns in results for month, day, hour, and minute.
+            default is False.
+
+    """
 
     year = int(year)
     doy = int(doy)
@@ -272,10 +453,10 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
         sys.exit()
 
     if doy > 366:
-        print('doy cannot be larger than 366: ', year)
+        print('doy cannot be larger than 366: ', doy)
         sys.exit()
 
-    lsp = guts.read_json_file(station, extension)
+    lsp = guts.read_json_file(station.lower(), extension)
     #print(lsp)
 
     #print('plt argument', plt)
@@ -289,11 +470,13 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
         #print('Using user defined maximum satellite arc time (minutes) ', lsp['delTmax'])
 
     # though I would think not many people would do this ...
-    if compress is not None:
-        if compress == 'True':
-            lsp['wantCompression'] = True
-        else:
-            lsp['wantCompression'] = False
+    if compress is True:
+        lsp['wantCompression'] = True
+    elif compress is False:
+        lsp['wantCompression'] = False
+    else:
+        print('compress must be a boolean: True or False')
+        sys.exit()
 
     if screenstats is False:
         #print('no statistics will come to the screen')
@@ -315,12 +498,15 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
         year_end = int(year_end)
 
     # default will be to overwrite
-    if nooverwrite is None:
+    if nooverwrite is True:
         lsp['overwriteResults'] = True
         #print('LSP results will be overwritten')
-    else:
+    elif nooverwrite is False:
         lsp['overwriteResults'] = False
         #print('LSP results will not be overwritten')
+    else:
+        print('nooverwrite must be a boolean: True or False')
+        sys.exit()
 
     if e1 is not None:
         #print('overriding minimum elevation angle: ', e1)
@@ -331,15 +517,11 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
 
     # in case you want to look at a restricted azimuth range from the command line
     setA = 0
-    if azim1 == 0:
-        pass
-    else:
-        setA = 1
+    if azim1 != 0:
+        setA += 1
 
-    if azim2 == 360:
-        pass
-    else:
-        setA = setA + 1
+    if azim2 != 360:
+        setA += 1
 
     if setA == 2:
         lsp['azval'] = [azim1, azim2]
@@ -362,7 +544,7 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
         lsp['onesat'] = [sat]
 
     add_mmddhhss = False
-    if mmdd == 'True':
+    if mmdd is True:
         add_mmddhhss = True
 
     lsp['mmdd'] = add_mmddhhss
@@ -384,25 +566,109 @@ def gnssir(station, year, doy, snr=66, plt=False, fr=None, ampl=None, sat=None, 
             wget.download(url, picklefile)
             subprocess.call(['mv', '-f', picklefile, xdir + '/input/'])
 
-    return {'args': {'station': station, 'year': year, 'doy': doy, 'snr_type': snr, 'extension': extension, 'lsp': lsp}, 'doy_end': doy_end, 'year_end': year_end}
+    args = {'station': station.lower(), 'year': year, 'doy': doy, 'snr_type': snr, 'extension': extension, 'lsp': lsp}
+
+    year_start = year
+    year_list = list(range(year_start, year_end + 1))
+    for year in year_list:
+        if year != year_end:
+            doy_en = 366
+        else:
+            doy_en = doy_end
+        if year == year_start:
+            doy_list = list(range(doy, doy_en + 1))
+        else:
+            doy_list = list(range(1, doy_en + 1))
+
+        args['year'] = year
+        for doy in doy_list:
+            args['doy'] = doy
+            guts.gnssir_guts(**args)
 
 
 def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, nr2=None, peak2noise=2.7, ampl=6.0,
-              allfreq=None, l1=None, l2c=None, xyz=None, refraction=None):
+              allfreq=False, l1=False, l2c=False, xyz=False, refraction=None):
+    """
+        Parameters:
+        ___________
+        station : string
+            4 or 9 character ID of the station.
+
+        lat : float
+            latitude in degrees.
+
+        long : float
+            longitude in degrees.
+
+        height : float
+            ellipsoidal height in meters.
+
+        e1 : integer, optional
+            elevation angle lower limit in degrees.
+            default is 5.
+
+        e2 : integer, optional
+            elevation angle upper limit in degrees.
+            default is 25.
+
+        h1 : float, optional
+            reflector height lower limit in meters.
+            default is 0.5.
+
+        h2 : float, optional
+            reflector height upper limit in meters.
+            default is 6.
+
+        nr1 : float, optional
+            noise region lower limit for QC in meters.
+            default is None.
+
+        nr2 : float, optional
+            noise region upper limit for QC in meters.
+            default is None.
+
+        peak2noise : float, optional
+            peak to noise ratio used for QC.
+            default is 2.7.
+
+        ampl : float, optional
+            spectral peak amplitude for QC.
+            default is 6.0
+
+        allfreq : Boolean, optional
+            True requests all GNSS frequencies.
+            default is False (defaults to use GPS frequencies).
+
+        l1 : boolean, optional
+            set to True to use only GPS L1 frequency.
+            default is False.
+
+        l2c : boolean, optional
+            set to Trye to use only GPS L2C frequency.
+            default is False.
+
+        xyz : boolean, optional
+            set to True if using Cartesian coordinates.
+            default is False.
+
+        refraction : boolean, optional
+            set to False to turn off refraction correction.
+            default is True.
+    """
 
     NS = len(station)
     if (NS != 4):
         print('station name must be four characters long. Exiting.')
         sys.exit()
 
-    if xyz == 'True':
+    if xyz is True:
         xyz = [lat, long, height]
         lat, long, height = g.xyz2llhd(xyz)
 
     reqA = ampl
 
     lsp = {}
-    lsp['station'] = station
+    lsp['station'] = station.lower()
     lsp['lat'] = lat
     lsp['lon'] = long
     lsp['ht'] = height
@@ -440,7 +706,7 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
 
     # frequencies to use - and their required amplitudes. The amplitudes are not set in stone
     # added L5 as default october 13, 2020
-    if allfreq is None:
+    if allfreq is False:
         # choose GPS as the default
         lsp['freqs'] = [1, 20, 5]
         lsp['reqAmp'] = [reqA, reqA,reqA]
@@ -457,9 +723,7 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
         lsp['reqAmp'] = [reqA]
 
     # use refraction correction
-    lsp['refraction'] = True
-    if refraction == 'False':
-        lsp['refraction'] = False
+    lsp['refraction'] = refraction
 
     # write new RH results  each time you run the code
     lsp['overwriteResults'] = True
@@ -490,28 +754,53 @@ def make_json(station, lat, long, height, e1=5, e2=25, h1=0.5, h2=6, nr1=None, n
         json.dump(lsp, outfile, indent=4)
 
 
-def read_allrh_file(filepath):
-    regex = '^ (?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+)'
-    data = {'dates': [], 'rh': []}
-    # read daily average reflector heights
-    with open(filepath, 'r') as myfile:
-        file = myfile.read()
-        matches = re.finditer(regex, file, flags=re.MULTILINE)
-
-        for match in matches:
-            ydoy = f'{int(match.group("year"))}-{int(match.group("doy"))}'
-            date = datetime.datetime.strptime(ydoy, '%Y-%j').date()
-            data['dates'].append(date)
-            data['rh'].append(float(match.group('rh')))
-
-    return data
-
-
 def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, extension='', year1=2005, year2=2021, fr=0, csv=False):
+    """
+        Parameters:
+        ___________
+        station : string
+            4 or 9 character ID of the station.
+
+        medfilter : float
+            Median filter for daily reflector height (m). Start with 0.25
+
+        ReqTracks : integer
+            Required number of tracks.
+
+        txtfile : string, optional
+            Use this parameter to set your own output filename.
+            default is None.
+
+        plt2screen : boolean, optional
+            whether to print plots to screen or not.
+            default is True.
+
+        extension : string, optional
+            extension for solution names.
+            default is ''. (empty string)
+
+        year1 : integer, optional
+            restrict to years starting with.
+            default is 2005.
+
+        year2 : integer, optional
+            restrict to years ending with.
+            default is 2021.
+
+        fr : integer, optional
+            GNSS frequency.
+            default is 0. (all)
+
+        csv : boolean, optional
+            Whether you want csv instead of a plain text file.
+            default is False (plain text).
+    """
     #   make surer environment variables are set
     xdir = os.environ['REFL_CODE']
     year1 = int(year1)
     year2 = int(year2)
+
+    station = station.lower()
 
     csvformat = csv
     if type(csvformat) is not bool:
@@ -642,7 +931,7 @@ def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, exte
     ax.plot(obstimes, meanRH, 'b.')
     fig.autofmt_xdate()
 
-    if plt2screen:
+    if plt2screen is True:
         pass
     else:
         plt.close()
@@ -656,7 +945,7 @@ def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, exte
     plt.savefig(pltname)
     print('Daily average RH png file saved as: ', pltname)
 
-    if plt2screen:
+    if plt2screen is True:
         plt.show()
     else:
         plt.close()
@@ -668,7 +957,7 @@ def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, exte
     plt.grid()
 
     # default is to show the plot
-    if plt2screen:
+    if plt2screen is True:
         plt.show()
     else:
         plt.close()
