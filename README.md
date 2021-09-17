@@ -2,7 +2,7 @@
 
 Jupyter Notebooks for the [GNSS interferometric reflectometry](https://github.com/kristinemlarson/gnssrefl) python package.
 
-##Options for installation:
+## Options for installation:
 
 * Option I: [Use Notebooks with Docker Container](#Docker)
     * Step 1: [Install Docker](#Install Docker)
