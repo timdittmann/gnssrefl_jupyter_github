@@ -15,7 +15,7 @@ docker image rm gnssrefl_jupyter
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "Build gnssrefl_jupyter image in current directory: command -> docker build --rm -t gnssir_jupyter/python ."
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-docker build --rm -t gnssir_jupyter .
+docker build --rm -t gnssrefl_jupyter .
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "docker run gnssrefl_jupyter container"
@@ -27,7 +27,7 @@ echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 # Open jupyter notebook directly 
 docker run \
         -it \
-        - v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files
+        -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files \
         -p 8888:8888 \
         --name='gnssrefl_jupyter' \
         -e GRANT_SUDO=yes --user root \
