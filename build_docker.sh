@@ -2,18 +2,18 @@
 
 echo "Resetting docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-echo "Stop / Remove gnssir_jupyter container - command -> docker stop and docker rm gnssir_jupyter_docker"
+echo "Stop / Remove gnssrefl_jupyter container - command -> docker stop and docker rm gnssrefl_jupyter_docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 docker stop gnssrefl_jupyter
 docker rm gnssrefl_jupyter
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-echo "Remove python image, image that made gnssir_jupyter_docker: command -> docker image rm python"
+echo "Remove python image, image that made gnssrefl_jupyter_docker: command -> docker image rm python"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 docker image rm gnssrefl_jupyter
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-echo "Build gnssrefl_jupyter image in current directory: command -> docker build --rm -t gnssir_jupyter/python ."
+echo "Build gnssrefl_jupyter image in current directory: command -> docker build --rm -t gnssrefl_jupyter ."
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 docker build --rm -t gnssrefl_jupyter .
 
@@ -42,4 +42,4 @@ echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 # Do not open jupyter notebook directly - detached mode (-d), and then use docker execute to enter the container in a bash shell
 
 #docker run -it -d -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes gnssrefl_jupyter
-#docker exec -it gnssrefl_jupyter_docker /bin/bash
+#docker exec -it gnssrefl_jupyter /bin/bash
