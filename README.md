@@ -90,7 +90,7 @@ Navigate to the directory where the Dockerfile from this repository is stored an
 
 Description of the commands used:
 * `--rm `: remove temporary images built
-* `-t` : tag/name the docker image 'event_response/python'
+* `-t` : tag/name the docker image 'gnssrefl_jupyter'
 * `.` : to build it in current directory
 
 ##### Run image as container
