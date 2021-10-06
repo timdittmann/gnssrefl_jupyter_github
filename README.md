@@ -26,6 +26,8 @@ See [here](#Docker Git info) for additional helpful commands for containers.
 
 More information on [getting started, testing your installation, and developing.](https://docs.docker.com/get-started/) 
 
+Useful tool to use is [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
 ###  Step 2. 
 
 ***
@@ -129,7 +131,7 @@ If instead you wish to not run the container in the current terminal, then run t
 
 If your container is running and you need to enter the container (such as detached mode), then use the `docker exec` command to enter the container in a bash shell. 
 
-`docker exec -it gnssir_jupyter /bin/bash`
+`docker exec -it gnssrefl_jupyter /bin/bash`
 
 From here you can obtain the token for the Jupyter Notebook by running the command `jupyter notebook list` to get the link and token to run the notebook in your browser. 
 
