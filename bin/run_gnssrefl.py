@@ -1010,3 +1010,97 @@ def daily_avg(station, medfilter, ReqTracks, txtfile=None, plt2screen=True, exte
                                                                                                      ntv[i, 5],
                                                                                                      ntv[i, 6]))
     fout.close()
+
+
+import gnssrefl.gps as g
+import sys
+import subprocess
+import os
+import wget
+
+def download_orbits(orbit, year, month, day):
+    """
+        Parameters:
+        ___________
+        orb : string, optional
+            Which orbit files to download.
+            Value options:
+            igs
+            igr
+            jax
+            grg
+            wum
+            gbm
+            nav
+            gps
+            gps+glo
+            gnss
+            gfr
+            esa
+            gnss2 - this is recommended for those having issues with downloading the 'gnss' orbits
+    """
+#   make sure environment variables exist.  set to current directory if not
+    g.check_environ_variables()
+
+    orbit_list = ['igs', 'igr','jax','grg','wum','gbm','nav','gps','gps+glo','gnss','gfr','esa','gnss2']
+
+
+#   assign to normal variables
+    pCtr = orbit
+
+    if len(str(year)) != 4:
+        print('Year must have four characters: ', year)
+        sys.exit()
+
+    if day == 0:
+        # then you are using day of year as input
+        doy = month
+        year,month,day=g.ydoy2ymd(year, doy)
+        doy,cdoy,cyyyy,cyy = g.ymd2doy(year,month,day)
+    else:
+        doy,cdoy,cyyyy,cyy = g.ymd2doy(year,month,day)
+
+
+    if pCtr not in orbit_list:
+        print('You picked an orbit type - ', pCtr, ' - that I do not recognize')
+        print(orbit_list)
+        sys.exit()
+
+    # if generic names used, we direct people to these orbit types
+    if pCtr == 'gps':
+        pCtr = 'nav'
+
+    if pCtr == 'gnss':
+        pCtr = 'gbm'
+
+    if pCtr == 'gps+glo':
+        pCtr = 'jax'
+
+    if pCtr == 'gfr':
+        pCtr = 'gbm' # since I cannot get their direct address to work
+
+    if pCtr == 'nav':
+        navname,navdir,foundit = g.getnavfile(year, month, day)
+        if foundit:
+            print('\n SUCCESS:', navdir+'/'+navname)
+    else:
+        if (pCtr == 'igs') or (pCtr == 'igr'):
+            filename, fdir, foundit = g.getsp3file_flex(year,month,day,pCtr)
+        else:
+            #if pCtr == 'gfr':
+                # does not work and i cannot access the directory so I cannot fix it
+                #filename, fdir, foundit = g.rapid_gfz_orbits(year,month,day)
+                #filename, fdir, foundit = g.rapid_gfz_orbits(year,month,day)
+            #else:
+            if pCtr == 'esa':
+                    # this is ugly - but hopefully will work for now.
+                filename, fdir, foundit = g.getsp3file_flex(year,month,day,pCtr)
+            elif (pCtr == 'gnss2'):
+                # use IGN instead of CDDIS
+                filename,fdir,foundit = g.avoid_cddis(year,month,day)
+            else:
+                filename, fdir, foundit = g.getsp3file_mgex(year,month,day,pCtr)
+        if foundit:
+            print('SUCCESS:', fdir+'/'+filename )
+        else:
+            print(filename , ' not found')
