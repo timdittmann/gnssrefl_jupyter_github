@@ -97,7 +97,7 @@ def download_crx2rnx(system=None, path_to_executables=None):
         sys.exit()
 
 
-def read_allrh_file(filepath):
+def read_rh_files(filepath):
     regex = '^ (?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+)'
     data = {'dates': [], 'rh': []}
     # read daily average reflector heights
@@ -113,6 +113,21 @@ def read_allrh_file(filepath):
 
     return data
 
+def read_subdaily(filepath):
+    regex = '^ ?(?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+) +(?P<satellite>[\d]+) +(?P<UTCtime>[\d|.]+)'
+    data = {'dates': [], 'rh': [], 'utctime': []}
+     # read daily average reflector heights
+    with open(filepath, 'r') as myfile:
+        file = myfile.read()
+        matches = re.finditer(regex, file, flags=re.MULTILINE)
+
+        for match in matches:
+            ydoy = f'{int(match.group("year"))}-{int(match.group("doy"))}'
+            date = datetime.datetime.strptime(ydoy, '%Y-%j').date()
+            data['dates'].append(date)
+            data['rh'].append(float(match.group('rh')))
+            data['datetime'].append(float(match.group('UTCtime')))
+    return data
 
 def quicklook_metrics(datakeys):
     quadrants = ['NW', 'NE', 'SW', 'SE']

@@ -1,15 +1,12 @@
-import sys
-import os
-import subprocess
 import json
 import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-import gnssrefl.gps as g
+
 import gnssrefl.gnssir as guts
 import gnssrefl.rinex2snr as r2s
 import gnssrefl.quickLook_function as q_func
-import wget
+import gnssrefl.subdaily as t
 
 
 def rinex2snr(station, year, doy, snr=66, orb='nav', rate='low', dec_rate=0, fortran=False,
@@ -1104,3 +1101,84 @@ def download_orbits(orbit, year, month, day):
             print('SUCCESS:', fdir+'/'+filename )
         else:
             print(filename , ' not found')
+
+
+def subdaily(station, year, txtfile=None, plt=False, outlier=0.5, extension='', doy1=1, doy2=366, testing=False):
+    """
+        Parameters:
+            ___________
+            station : string
+                4 or 9 character ID of the station.
+            year : integer
+                Year
+            txtfile : string
+                File name.
+                Default is None - will set name for you.
+            plt : boolean
+                To print plots to screen or not.
+                Default is False.
+            outlier : integer
+                outler criterion input (meters)
+                default is 0.5
+            extension : string
+                solution subdirectory.
+                default is empty string.
+            doy1 : integer
+                initial day of year
+                default is 1.
+            doy2 : integer
+                end day of year.
+                default is 366.
+            testing : boolean
+                set to True for testing mode.
+                default is False.
+    """
+    #   make sure environment variables are set
+    g.check_environ_variables()
+    xdir = os.environ['REFL_CODE']
+
+    year = int(year)
+
+    txtdir = xdir + '/Files'
+    if not os.path.exists(txtdir):
+        subprocess.call(['mkdir', txtdir])
+
+    #   these are optional output options
+    if txtfile == None:
+        # create the subdaily file
+        # read in the data and make a plot
+        doy1 = int(doy1)
+
+        doy2 = int(doy2)
+
+        ntv, obstimes = t.readin_and_plot(station, year, doy1, doy2, plt, extension)
+        N, M = np.shape(ntv)
+        # use function instead of writing it here
+        writecsv = False
+        writetxt = True
+        fname = xdir + '/Files/' + station + '_subdaily_rh.txt'
+        fname_new = xdir + '/Files/' + station + '_subdaily_edits_rh.txt'
+        extraline = ''
+        t.write_subdaily(fname, station, ntv, writecsv, writetxt, extraline)
+    else:
+        fname = txtfile
+        if not os.path.isfile(fname):
+            print('Input subdaily RH file does not exist:', fname)
+            sys.exit()
+
+    # I think these are used just for velocity ...
+    perday = 24 * 20  # every 3 minutes
+
+    # if not specified, use outlier criterion of 0.5 m
+    outlier = float(outlier)
+
+    # this way if it crashes, only effects me.  and I get more useful error messages
+    if testing is False:
+        try:
+            tv, corr = t.splines_for_dummies2(station, fname, fname_new, perday, plt, outlier, obstimes=obstimes)
+        except:
+            print('Some issues with the spline fit, mostly likely due to data gaps')
+    else:
+        tv, corr = t.splines_for_dummies2(station, fname, fname_new, perday, plt, outlier, obstimes=obstimes)
+
+    return tv, corr 
