@@ -33,6 +33,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssrefl_jupyter/orbits"
 ENV ORBITS=/home/jovyan/gnssrefl_jupyter/orbits
 ENV REFL_CODE=/home/jovyan/gnssrefl_jupyter
 ENV EXE=/home/jovyan/gnssrefl_jupyter/bin/exe
+ENV DOCKER=true
 
 # Change user to default jupyter user (from jupyter/scipy-notebook Dockerfile)
 USER $NB_UID

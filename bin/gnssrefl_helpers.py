@@ -47,32 +47,40 @@ def download_crx2rnx(system=None, path_to_executables=None):
         os.environ['EXE'] = path_to_executables
         print(f'reset environment variable to the requested path_to_executables: {os.environ["EXE"]}')
 
-    if 'macos' in system:
-        download_file = 'RNXCMP_4.0.8_MacOSX10.14_gcc.tar.gz'
-        downloaded_dir = 'RNXCMP_4.0.8_MacOSX10.14_gcc'
-    elif 'linux' in system and '64' in system:
-        download_file = 'RNXCMP_4.0.8_Linux_x86_64bit.tar.gz'
-        downloaded_dir = 'RNXCMP_4.0.8_Linux_x86_64bit'
-    elif 'linux' in system and '32' in system:
-        download_file = 'RNXCMP_4.0.8_Linux_x86_64bit.tar.gz'
-        downloaded_dir = 'RNXCMP_4.0.8_Linux_x86_64bit'
-    elif 'sunos' in system:
-        download_file = 'RNXCMP_4.0.8_SunOS5.9_32bit.tar.gz'
-        downloaded_dir = 'RNXCMP_4.0.8_SunOS5.9_32bit'
-    elif 'windows' in system and '32' in system:
-        download_file = 'RNXCMP_4.0.8_Windows_mingw_32bit.tar'
-        downloaded_dir = 'RNXCMP_4.0.8_Windows_mingw_32bit'
-    elif 'windows' in system and '64' in system:
-        download_file = 'RNXCMP_4.0.8_Windows_mingw_64bit.tar'
-        downloaded_dir = 'RNXCMP_4.0.8_Windows_mingw_64bit'
-    else:
+    html_path = 'https://terras.gsi.go.jp/ja/crx2rnx.html'
+    url = urllib.request.urlopen(html_path)
+    html = str(url.read())
+
+    regex = '(crx2rnx.)(RNXCMP_[\d|\w|_|.]+)'
+    matches = re.finditer(regex, html)
+
+    download_files = []
+    for match in matches:
+        file = match.group(2)
+        download_files.append(file)
+    os_types = {'macos': ['macos'], 'linux': ['64', '32'], 'sunos': ['sunos'], 'windows': ['64', '32']}
+    matched = 0
+    for os_type in os_types:
+        if os_type in system:
+            matched += 1
+            if len(os_types[os_type]) > 1:
+                for sub_type in os_types[os_type]:
+                    str_match = [s for s in download_files if os_type in s.lower() and sub_type in s.lower()]
+                    download_file = str_match[0]
+                    downloaded_dir = download_file.replace(".tar.gz",'').replace(".zip",'')
+            else:
+                str_match = [s for s in download_files if os_type in s.lower()]
+                download_file = str_match[0]
+                downloaded_dir = download_file.replace(".tar.gz", '').replace(".zip", '')
+
+    if matched == 0:
         print('We could not identify your operating system.'
               'Please add the parameter system= with either macos, linux32, linux64, sunos, windows32, or windows64')
         sys.exit()
 
-    download_path = 'https://terras.gsi.go.jp/ja/crx2rnx/'
     try:
         # download the correct file from the site
+        download_path = 'https://terras.gsi.go.jp/ja/crx2rnx'
         print('downloading CRX2RNX file')
         urllib.request.urlretrieve(os.path.join(download_path, download_file), os.path.join(path_to_executables, download_file))
 
@@ -149,3 +157,7 @@ def quicklook_metrics(datakeys):
             fail_data['Amplitude'].append(datakeys[f'f{quadrant}'][k][4])
 
     return pd.DataFrame(success_data), pd.DataFrame(fail_data)
+
+
+if __name__ == '__main__':
+    download_crx2rnx()
