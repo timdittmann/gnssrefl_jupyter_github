@@ -2,4 +2,4 @@ jupyter
 numpy
 pandas
 seaborn
-gnssrefl
+git+https://github.com/kristinemlarson/gnssrefl.git
