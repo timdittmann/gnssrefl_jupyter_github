@@ -4,21 +4,16 @@ echo "Resetting docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "Stop / Remove gnssrefl_jupyter container - command -> docker stop and docker rm gnssrefl_jupyter_docker"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-docker stop gnssrefl_jupyter
-docker rm gnssrefl_jupyter
+docker stop unavdocker/gnssrefl_jupyter
+docker rm unavdocker/gnssrefl_jupyter
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 echo "Remove python image, image that made gnssrefl_jupyter_docker: command -> docker image rm python"
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-docker image rm gnssrefl_jupyter
+docker image rm unavdocker/gnssrefl_jupyter
 
 echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-echo "Build gnssrefl_jupyter image in current directory: command -> docker build --rm -t gnssrefl_jupyter ."
-echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-docker build --rm -t gnssrefl_jupyter .
-
-echo *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-echo "docker run gnssrefl_jupyter container"
+echo "docker run gnssrefl_jupyter unavdocker/container (pull image from dockerhub if not local)"
 echo "Interactive, on port 8888, name = gnssrefl_jupyter"
 echo "Mount external volumes - notebooks, orbits, working and bin directoy is copied into Docker container"
 echo "* Starting Container..."
@@ -32,7 +27,7 @@ docker run \
         --name='gnssrefl_jupyter' \
         -e GRANT_SUDO=yes --user root \
         --restart=unless-stopped \
-        gnssrefl_jupyter
+        unavdocker/gnssrefl_jupyter
 
 # If you want to add your own external volume add another -v command to the docker run command
 #-v ~/[path_to_local_directory]:/home/jovyan/gnssrefl_jupyter/[personal_directory]
