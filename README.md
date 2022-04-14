@@ -12,6 +12,13 @@ Jupyter Notebooks for the [GNSS interferometric reflectometry](https://github.co
         * Option 3: [Use git repository and run manual docker commands](#Docker Git Commands)
 * Option II: [Use Notebooks with local Python build](#Local)
 
+### See Here for shutdown instructions:
+[Jupyter and Docker Shutdown Process](#Shutdown)
+
+### See here for instructions on how update your docker with most recent changes (most recent update: 4-14-2022)
+[Update to Most Recent Docker Image](#Update Docker)
+***
+
 ## Use Notebooks with Docker Container (Recommended method) <a name="Docker"></a>
 See [here](#Docker Git info) for additional helpful commands for containers.
 ***
@@ -35,6 +42,7 @@ Useful tool to use is [Docker Desktop](https://www.docker.com/products/docker-de
 #### Option 1: build and run docker container using dockerhub <a name="Dockerhub"></a>
 Navigate to the directory where you would like to have output data stored. 
 Note that the code will create a directory called Files where the final data will be stored for you locally.
+NOTE: If you would like to make your own notebook and keep the changes if you need to remove/update the docker - you can place the notebook in the Files folder.
 
 Then run:
 `docker run -it -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes --user root --restart=unless-stopped unavdocker/gnssrefl_jupyter:latest`
@@ -46,11 +54,12 @@ Description of the commands used:
 * `--name` : name of docker container
 * `-e` : granting sudo permissions
 * `--user` : setting the user
-* `reference dockerhub image` : This will build the dockerhub image if it doesn't already exist.
+* `reference dockerhub image` : This will build the dockerhub image if it doesn't already exist locally.
 
 
 This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste the last url provided at the end into a browser and run the jupyter notebooks from there.
 The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
+
 
 DONE - Below are other options for installation.
 ***
@@ -115,6 +124,21 @@ The url will look something like `http://127.0.0.1:8888/?token=` with a randomly
 DONE.
 
 ***
+#### Shutdown <a name="Shutdown"></a>
+To Shut down the Jupyter notebook from the terminal just use `ctrl+c`
+
+To shut down the docker container run `docker stop [container name]`
+If you need to see the container(s) you have running you can use `docker ps`
+
+#### Update Docker Image to newest version <a name="Update Docker"></a>
+To update your Image from our DockerHub. Run `docker pull unavdocker/gnssrefl_jupyter`
+
+Then you will need to launch an updated container.
+If your container is running - stop the container (see above).
+Then run `docker rm [container name]`
+
+finally you can re-run the container:
+`docker run -it -v $(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files -p 8888:8888 --name='gnssrefl_jupyter' -e GRANT_SUDO=yes --user root --restart=unless-stopped unavdocker/gnssrefl_jupyter:latest`
 
 #### Additional information for running a docker container: <a name="Docker Git info"></a>
 The following are additional docker commands that are optional:
