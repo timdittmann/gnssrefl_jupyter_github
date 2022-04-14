@@ -49,7 +49,7 @@ Description of the commands used:
 * `reference dockerhub image` : This will build the dockerhub image if it doesn't already exist.
 
 
-This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste the last url provided at the end into a browser and run the jupyter notebooks from there.
 The url will look something like `http://127.0.0.1:8888/?token=` with a randomly generated token at the end.
 
 DONE - Below are other options for installation.

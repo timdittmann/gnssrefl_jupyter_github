@@ -121,6 +121,7 @@ def read_rh_files(filepath):
 
     return data
 
+
 def read_subdaily(filepath):
     regex = '^ ?(?P<year>[ \d]+) +(?P<doy>[\d]+) +(?P<rh>[\d|-|.]+) +(?P<satellite>[\d]+) +(?P<UTCtime>[\d|.]+)'
     data = {'dates': [], 'rh': [], 'utctime': []}
@@ -136,6 +137,7 @@ def read_subdaily(filepath):
             data['rh'].append(float(match.group('rh')))
             data['datetime'].append(float(match.group('UTCtime')))
     return data
+
 
 def quicklook_metrics(datakeys):
     quadrants = ['NW', 'NE', 'SW', 'SE']
