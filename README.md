@@ -15,7 +15,9 @@ Jupyter Notebooks for the [GNSS interferometric reflectometry](https://github.co
 ### See Here for shutdown instructions:
 [Jupyter and Docker Shutdown Process](#Shutdown)
 
-### See here for instructions on how update your docker with most recent changes (most recent update: 4-14-2022)
+### See here for instructions on how update your docker with most recent changes 
+(most recent update: April 15 2022)
+
 [Update to Most Recent Docker Image](#Update Docker)
 ***
 
