@@ -1,5 +1,3 @@
-# This will be the Dockerfile for event response 
-
 # Start from the jupyter/scipy-notebook image, which includes....
 # python3, scipy, pandas, matplotlib, ipywidgets (activated), numba, hdf5, etc...
 # For more information... https://hub.docker.com/r/jupyter/scipy-notebook/dockerfile
@@ -7,19 +5,28 @@
 FROM jupyter/scipy-notebook
 WORKDIR /home/jovyan/gnssrefl_jupyter
 
-MAINTAINER = UNAVCO Inc.
+LABEL maintainer="UNAVCO Inc."
 
 USER root
 
 RUN apt-get update && \
     apt-get install -y gcc && \
     apt-get install -y gfortran && \
+    apt-get install -y unzip && \
+    apt-get install -y wget && \
+    apt-get install -y vim && \
     rm -rf /var/lib/apt/lists/*
 
 # COPY the bin folder (code that should not be edited by the user) into the docker
 COPY --chown=$NB_UID:users /bin /home/jovyan/gnssrefl_jupyter/bin
 RUN chmod +x /home/jovyan/gnssrefl_jupyter/bin/*
 ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/gnssrefl_jupyter/bin"
+RUN wget https://terras.gsi.go.jp/ja/crx2rnx/RNXCMP_4.1.0_src.tar.gz \
+    && tar -xf RNXCMP_4.1.0_src.tar.gz \
+    && gcc -ansi -O2 RNXCMP_4.1.0_src/source/crx2rnx.c -o CRX2RNX \
+    && mv CRX2RNX /home/jovyan/gnssrefl_jupyter/bin/exe \
+    && rm -rf RNXCMP*
+
 
 # Copy the data directory
 COPY --chown=$NB_UID:users /data /home/jovyan/gnssrefl_jupyter/data
