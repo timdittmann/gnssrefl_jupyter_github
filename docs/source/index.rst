@@ -5,7 +5,13 @@
 
 Welcome to gnssrefl documentation!
 ================================================
+.. image:: https://morefunwithgps.com/public_html/gnssrefl-images-sm.jpg
 
+``gnssrefl`` is an open source/python version of my GNSS interferometric reflectometry (GNSS-IR) code.
+
+.. image:: https://img.shields.io/pypi/v/gnssrefl.svg
+
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.5601495.svg
 
 .. toctree::
    :maxdepth: 2
