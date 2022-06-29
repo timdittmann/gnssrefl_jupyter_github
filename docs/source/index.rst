@@ -32,6 +32,6 @@ Welcome to gnssrefl documentation!
 .. toctree::
    :maxdepth: 2
    :hidden:
-   :caption: Development:
+   :caption: Contributions and Questions:
 
-
+   contributions-questions.md
