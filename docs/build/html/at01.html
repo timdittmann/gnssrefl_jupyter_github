@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+
+<html lang="python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>AT01 &#8212; gnssrefl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="GNSS Reflectometry Jupyter Notebook Installation" href="jupyter-notebook-installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="at01">
+<h1>AT01<a class="headerlink" href="#at01" title="Permalink to this heading">¶</a></h1>
+<dl>
+<dt>{</dt><dd><dl>
+<dt>&quot;cells&quot;: [</dt><dd><dl>
+<dt>{</dt><dd><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;6e2bd2cc&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;### St Michael Bayn&quot;,
+&quot;n&quot;,
+&quot;<strong>Station Name:</strong>  at01n&quot;,
+&quot;n&quot;,
+&quot;<strong>Location:</strong>  St Michael, Alaskan&quot;,
+&quot;n&quot;,
+&quot;<strong>Archive:</strong>  [UNAVCO](<a class="reference external" href="http://www.unavco.org)n">http://www.unavco.org)n</a>&quot;,
+&quot;n&quot;,
+&quot;<strong>Ellipsoidal Coordinates:</strong>n&quot;,
+&quot;n&quot;,
+&quot;- Latitude:  63.4840n&quot;,
+&quot;n&quot;,
+&quot;- Longitude: -162.0064n&quot;,
+&quot;n&quot;,
+&quot;- Height: 21.7 mn&quot;,
+&quot;n&quot;,
+&quot;[Station Page at UNAVCO](<a class="reference external" href="https://www.unavco.org/instrumentation/networks/status/nota/overview/AT01)n">https://www.unavco.org/instrumentation/networks/status/nota/overview/AT01)n</a>&quot;,
+&quot;n&quot;,
+&quot;[Station Page at Nevada Geodetic Laboratory](<a class="reference external" href="http://geodesy.unr.edu/NGLStationPages/stations/AT01.sta)n">http://geodesy.unr.edu/NGLStationPages/stations/AT01.sta)n</a>&quot;,
+&quot;n&quot;,
+&quot;[Google Map Link](<a class="reference external" href="https://goo.gl/maps/uWyoNFf4DRjYLmfUA)n">https://goo.gl/maps/uWyoNFf4DRjYLmfUA)n</a>&quot;,
+&quot;n&quot;,
+&quot;&lt;p align=&quot;center&quot;&gt;n&quot;,
+&quot;&lt;img src=&quot;<a class="reference external" href="https://www.unavco.org/data/gps-gnss/lib/images/station_images/AT01.jpg">https://www.unavco.org/data/gps-gnss/lib/images/station_images/AT01.jpg</a>&quot; width=&quot;500&quot;&gt;n&quot;,
+&quot;&lt;/p&gt;&quot;</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;d14d2139&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;## Data Summaryn&quot;,
+&quot;n&quot;,
+&quot;at01 has good visibility over a large azimuthal region and the monument is about a meter taller than normal geodetic monuments which helps improve visibility of the sea surface. At01 observes all constellation signals.n&quot;,
+&quot;n&quot;,
+&quot;## Imports&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;c85f97c4&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;import osn&quot;,
+&quot;import sysn&quot;,
+&quot;import ren&quot;,
+&quot;import jsonn&quot;,
+&quot;import pandas as pd n&quot;,
+&quot;import numpy as npn&quot;,
+&quot;import seaborn as sns; sns.set_theme(style=&quot;whitegrid&quot;);n&quot;,
+&quot;import matplotlib.pyplot as pltn&quot;,
+&quot;import datetimen&quot;,
+&quot;n&quot;,
+&quot;# import gnssrefl functionsn&quot;,
+&quot;from gnssrefl.rinex2snr_cl import rinex2snr n&quot;,
+&quot;from gnssrefl.quickLook_cl import quicklookn&quot;,
+&quot;from gnssrefl.make_json_input import make_jsonn&quot;,
+&quot;from gnssrefl.gnssir_cl import gnssirn&quot;,
+&quot;from gnssrefl.daily_avg_cl import daily_avgn&quot;,
+&quot;from gnssrefl.subdaily_cl import subdailyn&quot;,
+&quot;n&quot;,
+&quot;# We are including our repository bin to the system path so that we can import the following python modulesn&quot;,
+&quot;bin_path = os.path.abspath(os.path.join('../../bin'))n&quot;,
+&quot;if bin_path not in sys.path:n&quot;,
+&quot;    sys.path.append(bin_path)n&quot;,
+&quot;    n&quot;,
+&quot;import gnssrefl_helpersn&quot;,
+&quot;n&quot;,
+&quot;%matplotlib inline&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;3635d078&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;#Making sure environment variables are set - this is required to run the gnssrefl coden&quot;,
+&quot;exists = gnssrefl_helpers.check_environment()n&quot;,
+&quot;if exists == False:n&quot;,
+&quot;    gnssrefl_helpers.set_environment()n&quot;,
+&quot;        n&quot;,
+&quot;refl_code_loc = os.environ['REFL_CODE']n&quot;,
+&quot;# import the crx2rnx file which is dependant on your working OS - this is required to run the gnssrefl coden&quot;,
+&quot;# If in docker environment, then you do not need to download crxnrnxn&quot;,
+&quot;try:n&quot;,
+&quot;    os.environ['DOCKER']n&quot;,
+&quot;except KeyError:n&quot;,
+&quot;    gnssrefl_helpers.download_crx2rnx()&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;65fd8a5d&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;# This is only for these use cases - you can set pltscreen=True in quicklook to print these plots as welln&quot;,
+&quot;def pretty_plots(station, values, frequency, metrics=None):n&quot;,
+&quot;    # plotting the quicklook graph periodogramsn&quot;,
+&quot;    fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(12,10), sharex=True)n&quot;,
+&quot;    fig.suptitle(f'QuickLook: {station},{frequency}', size=16)n&quot;,
+&quot;n&quot;,
+&quot;    quadrants = ['NW', 'NE', 'SW', 'SE']n&quot;,
+&quot;    quadrant_labels = ['Northwest','Northeast', 'Southwest', 'Southeast']n&quot;,
+&quot;n&quot;,
+&quot;    for i, ax in enumerate(axes.flat):n&quot;,
+&quot;        quad = quadrants[i]n&quot;,
+&quot;        for fail_satellite in values[f'f{quad}']:n&quot;,
+&quot;            g = sns.lineplot(x=values[f'f{quad}'][fail_satellite][0],n&quot;,
+&quot;                             y=values[f'f{quad}'][fail_satellite][1],n&quot;,
+&quot;                             ax=ax, color='lightgrey')n&quot;,
+&quot;        for satellite in values[quad]:n&quot;,
+&quot;            g = sns.lineplot(x=values[quad][satellite][0],n&quot;,
+&quot;                             y=values[quad][satellite][1],n&quot;,
+&quot;                             ax=ax)n&quot;,
+&quot;        g.set_title(quadrant_labels[i])n&quot;,
+&quot;        g.set_ylabel('volts/volts')n&quot;,
+&quot;        g.set_xlabel('reflector height (m)')n&quot;,
+&quot;n&quot;,
+&quot;    if metrics:n&quot;,
+&quot;        success, fail = gnssrefl_helpers.quicklook_metrics(metrics)n&quot;,
+&quot;        fig, axes = plt.subplots(ncols=1, nrows=3, figsize=(10,10), sharex=True)n&quot;,
+&quot;        fig.suptitle(f'QuickLook Retrieval Metrics: {station}, {frequency}', size=16)n&quot;,
+&quot;n&quot;,
+&quot;        for i, ax in enumerate(axes):n&quot;,
+&quot;            g = sns.scatterplot(x='Azimuth',y=success.columns[i+1], data=success, ax=ax, label='good')n&quot;,
+&quot;            g = sns.scatterplot(x='Azimuth',y=fail.columns[i+1], data=fail, ax=ax, color='lightgrey', label='bad')n&quot;,
+&quot;n&quot;,
+&quot;        axes[0].legend(loc='upper right')n&quot;,
+&quot;n&quot;,
+&quot;        avg_rh = np.mean(success['Reflector Height'])n&quot;,
+&quot;        print(f'Average reflector height value: {avg_rh:.1f}')n&quot;,
+&quot;n&quot;,
+&quot;    plt.tight_layout()n&quot;,
+&quot;    plt.show()&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;8ade15da&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;# reflecion zone appn&quot;,
+&quot;n&quot;,
+&quot;now we can use the reflection zone part of the web app:&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;51cc95a4&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;%%htmln&quot;,
+&quot;&lt;iframe src=&quot;<a class="reference external" href="https://gnss-reflections.org/geoid">https://gnss-reflections.org/geoid</a>&quot; width=&quot;1000&quot; height=&quot;600&quot;&gt;&lt;/iframe&gt;&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;83d17c2c&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Next, we could look at the reflection zone app to pick a possible mask.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;3a06006d&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;%%htmln&quot;,
+&quot;&lt;iframe src=&quot;<a class="reference external" href="https://gnss-reflections.org/rzones">https://gnss-reflections.org/rzones</a>&quot; width=&quot;1000&quot; height=&quot;700&quot;&gt;&lt;/iframe&gt;&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;8fa73a59&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;just looking at this can give us an idea of the possible azimuth mask - Guessing we will not get good retrievals in the northwest quadrant. We will confirm this with the qc plots when we use quicklook.n&quot;,
+&quot;n&quot;,
+&quot;It's also useful to note that it is about 12 meters above sea level.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;2b426759&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;### Take a Quick Look at the Datan&quot;,
+&quot;First examine the spectral characteristics of the SNR data.n&quot;,
+&quot;n&quot;,
+&quot;First, we download a snr file using rinex2snr. We will pick a year and day - in this case we'll look at day of year 109 for the year 2020. &quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;5e768669&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;# Download SNR n&quot;,
+&quot;# we are going to just pick a year and dayn&quot;,
+&quot;# this will generate a SNR file at a sampling rate of 15 seconds.n&quot;,
+&quot;station = 'at01'n&quot;,
+&quot;year=2020n&quot;,
+&quot;doy=109n&quot;,
+&quot;n&quot;,
+&quot;rinex2snr(station=station, year=year, doy=doy, archive='unavco', orb='gnss')&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;27026d63&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Now we can run quicklook, this is what it will look like if we don't change any of the defualts:&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;fd3df6c0&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;values, metrics = quicklook(station, year, doy=doy, pltscreen=False)n&quot;,
+&quot;pretty_plots(station, values, 'GPS L1', metrics)&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;3b5af95e&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Using the default settings with quicklook we would likely think it is not a useful site, as nearly every retrieval is set as bad.n&quot;,
+&quot;n&quot;,
+&quot;Let's see what the defaults are set to by adding a question mark to the function and running that cell.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;c7e9390b&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;quicklook?&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;5f124fc9&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Now we can see what the defaults are and information about the parameters in the doc string as well. n&quot;,
+&quot;n&quot;,
+&quot;So, remembering that the site is 12 meters above sea level and we can see that the default restricts the reflector height region to 0.5 to 6 meters. n&quot;,
+&quot;n&quot;,
+&quot;Let's try quicklook again using a reflector height region that includes the water surface. We'll set h1 to 8 and h2 to 15 and we're also going to change the elevation angles to 5 and 13 degrees:&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;b2170a39&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;values, metrics = quicklook(station, year, doy=doy,n&quot;,
+&quot;                                         e1=5, e2=13, h1=8, h2=15, pltscreen=False)n&quot;,
+&quot;n&quot;,
+&quot;pretty_plots(station, values, 'GPS L1', metrics)&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;7ede4ca0&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Now we see good retrievals at azimuths from true north to about 220 degrees (around what we expected from using the reflection zone app) and we also see strong retrievals in the Lomb Scargle periodograms.n&quot;,
+&quot;n&quot;,
+&quot;This site does have modern GPS signals, as well as Galileo and Glonass signals.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;2570255d&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;results for L2C:&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;e2e81aa9&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;values, metrics = quicklook(station, year, doy=doy, n&quot;,
+&quot;                                         e1=5, e2=13, h1=8, h2=15, fr=20, pltscreen=False)n&quot;,
+&quot;n&quot;,
+&quot;pretty_plots(station, values, 'GPS L2C')&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;0d31c240&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Now we can look at glonass by setting f to 101 and Galileo we will set f to 205.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;6b30bf08&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;values_l1, metrics_l1 = quicklook(station, year, doy=doy,n&quot;,
+&quot;                                         e1=5, e2=13, h1=8, h2=15, fr=101, pltscreen=False)n&quot;,
+&quot;n&quot;,
+&quot;pretty_plots(station, values_l1, 'GLONASS')n&quot;,
+&quot;n&quot;,
+&quot;values_l2, metrics_l2 = quicklook(station, year, doy=doy,n&quot;,
+&quot;                                         e1=5, e2=13, h1=8, h2=15, fr=205, pltscreen=False)n&quot;,
+&quot;n&quot;,
+&quot;pretty_plots(station, values_l2, 'GALILEO')&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;6b622bf3&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;### Analyze the Datan&quot;,
+&quot;n&quot;,
+&quot;Next we will analyze data for two months in the fall of 2020. Our first step would be to make the SNR files.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;51c61233&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;rinex2snr?&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;8e23603f&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;rinex2snr(station, year, 230, doy_end=290, archive='unavco', orb='gnss')&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;f4d76d3e&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;The next step is to create the json file that gnssir reads with the values that we have decided on from the quicklook step. In this case we will set the elevation angles and the heights. We will also set the parameter allfreq to true.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;e5be3141&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;lat = 63.484n&quot;,
+&quot;long = -162.006n&quot;,
+&quot;height = 21.565n&quot;,
+&quot;n&quot;,
+&quot;make_json(station, lat, long, height, e1=5, e2=13, h1=8, h2=15, allfreq=True)&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;7d1e5c54&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;# This is the json file that was created with the defaults/parameters you set aboven&quot;,
+&quot;json_file = f'{refl_code_loc}/input/{station}.json'n&quot;,
+&quot;with open(json_file, &quot;r&quot;) as myfile:n&quot;,
+&quot;    file = json.load(myfile)n&quot;,
+&quot;    n&quot;,
+&quot;file&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;f2bc7c8f&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;To set the azimuth range that we decided on, we need to edit the json file manually. We are also going to edit out the Beidou signals since they are not in rinex2 files.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;a8d76b2d&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;# Now lets edit the json filen&quot;,
+&quot;with open(json_file, &quot;r&quot;) as myfile:n&quot;,
+&quot;    file = json.load(myfile)n&quot;,
+&quot;    n&quot;,
+&quot;# Here is where we can 'hand edit' values in the json filen&quot;,
+&quot;# lets edit the azimuths. We set these values by looking at the metrics qc plot aboven&quot;,
+&quot;file['azval'] = [20,90,90,180,180,220]n&quot;,
+&quot;file['freqs'] = [1,20,5,101,102,201,205,206,207]n&quot;,
+&quot;os.remove(json_file)n&quot;,
+&quot;n&quot;,
+&quot;with open(json_file, 'w') as f:n&quot;,
+&quot;    json.dump(file, f, indent=4)n&quot;,
+&quot;    n&quot;,
+&quot;# now lets view it again and note the differencen&quot;,
+&quot;with open(json_file, &quot;r&quot;) as myfile:n&quot;,
+&quot;    file = json.load(myfile)n&quot;,
+&quot;n&quot;,
+&quot;file&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;cef89a4b&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;Next, we will run gnssir to estimate the reflector height (RH) for the two month time period.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;a9410381&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;year = 2020n&quot;,
+&quot;doy = 230n&quot;,
+&quot;doy_end = 290n&quot;,
+&quot;gnssir(station, year, doy, doy_end=doy_end, screenstats=False)&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;markdown&quot;,
+&quot;id&quot;: &quot;affba962&quot;,
+&quot;metadata&quot;: {},
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;We have do have some code to help you look at subdaily files. This will be helpful to look at tides. n&quot;,
+&quot;n&quot;,
+&quot;We will set an outlier criteria of 0.36 meters (one sigma 0.12 meters ==&gt; 0.36 meters three sigma) to start with.n&quot;,
+&quot;n&quot;,
+&quot;This preliminary version of the code removes outliers and makes an effort to compute the RH dot correction.&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;bd6c3a6d&quot;,
+&quot;metadata&quot;: {</p>
+<blockquote>
+<div><p>&quot;scrolled&quot;: false</p>
+</div></blockquote>
+<p>},
+&quot;outputs&quot;: [],
+&quot;source&quot;: [</p>
+<blockquote>
+<div><p>&quot;tv, corr = subdaily(station='at01', year=2020, doy1=230, doy2=290,n&quot;,
+&quot;                                 outlier=0.36, plt=True)&quot;</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>&quot;cell_type&quot;: &quot;code&quot;,
+&quot;execution_count&quot;: null,
+&quot;id&quot;: &quot;5ffe0d5a&quot;,
+&quot;metadata&quot;: {},
+&quot;outputs&quot;: [],
+&quot;source&quot;: []</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>],
+&quot;metadata&quot;: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>&quot;kernelspec&quot;: {</dt><dd><p>&quot;display_name&quot;: &quot;gnssrefl_jupyter&quot;,
+&quot;language&quot;: &quot;python&quot;,
+&quot;name&quot;: &quot;gnssrefl_jupyter&quot;</p>
+</dd>
+</dl>
+<p>},
+&quot;language_info&quot;: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>&quot;codemirror_mode&quot;: {</dt><dd><p>&quot;name&quot;: &quot;ipython&quot;,
+&quot;version&quot;: 3</p>
+</dd>
+</dl>
+<p>},
+&quot;file_extension&quot;: &quot;.py&quot;,
+&quot;mimetype&quot;: &quot;text/x-python&quot;,
+&quot;name&quot;: &quot;python&quot;,
+&quot;nbconvert_exporter&quot;: &quot;python&quot;,
+&quot;pygments_lexer&quot;: &quot;ipython3&quot;,
+&quot;version&quot;: &quot;3.9.8&quot;</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>},
+&quot;nbformat&quot;: 4,
+&quot;nbformat_minor&quot;: 5</p>
+</dd>
+</dl>
+<p>}</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gnssrefl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method.html">Method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-installation.html">Command Line Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter-notebook-installation.html">GNSS Reflectometry Jupyter Notebook Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases :</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AT01</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="jupyter-notebook-installation.html" title="previous chapter">GNSS Reflectometry Jupyter Notebook Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, dittmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/at01.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

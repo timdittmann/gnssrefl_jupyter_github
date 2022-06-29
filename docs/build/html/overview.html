@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html lang="python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Overview &#8212; gnssrefl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Method" href="method.html" />
+    <link rel="prev" title="Welcome to gnssrefl documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h1>
+<section id="philosophical-statement">
+<h2>Philosophical Statement<a class="headerlink" href="#philosophical-statement" title="Permalink to this heading">¶</a></h2>
+<p>In geodesy, you don't really need to know much about what you are doing to
+calculate a reasonably precise position from GPS data. That's just the way it is.
+(Note: that is also thanks to the hard work of the geodesists that wrote the
+computer codes). For GPS/GNSS reflections, you need to know a little bit more - like what are you
+trying to do? Are you trying to measure water levels? Then you need to know where the water
+is! (with respect to your antenna, i.e. which azimuths are good and which are bad).
+Another application of this code is to measure snow accumulation. If you
+have a bunch of obstructions near your antenna,
+you are responsible for knowing not to use that region. If your antenna is 10 meters
+above the reflection area, and the software default only computes answers up to 6 meters,
+the code will not tell you anything useful. It is up to you to know what is best for the site and
+modify the inputs accordingly.
+I encourage you to get to know your site. If it belongs to you, look at
+photographs. If you can't find photographs, use Google Earth.  You can also try using
+my <a class="reference external" href="https://gnss-reflections.org/geoid?station=smm3">google maps web app interface</a>.</p>
+<p><strong>gnssrefl</strong> is an open source/python version of my GNSS interferometric reflectometry (GNSS-IR) code.</p>
+<p><em>If you would like to try out reflectometry without installing the code</em></p>
+<p>I recommend you use <a class="reference external" href="https://gnss-reflections.org">this web app</a>. It
+can show you representative results with minimal constraints. It should provide
+results in less than 10 seconds.</p>
+<p><em>If you prefer Matlab</em></p>
+<p>I had a <a class="reference external" href="https://github.com/kristinemlarson/gnssIR_matlab_v3">working matlab version on github</a>,
+but I will not be updating it. You will very likely have to make changes to accommodate the recent
+change in security protocols at CDDIS.</p>
+</section>
+<section id="goals">
+<h2><em>Goals</em><a class="headerlink" href="#goals" title="Permalink to this heading">¶</a></h2>
+<p>The goal of this python repository is to help you compute (and evaluate) GNSS-based
+reflectometry parameters using geodetic data. This method is often
+called GNSS-IR, or GNSS Interferometric Reflectometry. There are three main modules:</p>
+<ul class="simple">
+<li><p><strong>rinex2snr</strong> translates RINEX files into SNR files needed for analysis.</p></li>
+<li><p><strong>gnssir</strong> computes reflector heights (RH) from SNR files.</p></li>
+<li><p><strong>quickLook</strong> gives you a quick (visual) assessment of a file without dealing
+with the details associated with <strong>gnssir</strong>. It is not meant to be used for routine analysis.
+It also helps you pick an appropriate azimtuh mask and quality control settings.</p></li>
+</ul>
+<p>There are also various <span class="xref myst">utilities</span> you might find to be useful.</p>
+<p>If you are unsure about why various restrictions are being applied, it is really useful
+to read <a class="reference external" href="https://link.springer.com/article/10.1007/s10291-018-0744-8">Roesler and Larson (2018)</a>
+or similar.</p>
+</section>
+<section id="publications">
+<h2>Publications<a class="headerlink" href="#publications" title="Permalink to this heading">¶</a></h2>
+<p>There are A LOT of publications about GPS and GNSS interferometric reflectometry.
+If you want something with a how-to flavor, try this paper,
+which is <a class="reference external" href="https://link.springer.com/article/10.1007/s10291-018-0744-8">open option</a>. Also
+look to the publications page on my <a class="reference external" href="https://kristinelarson.net/publications">personal website</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gnssrefl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#philosophical-statement">Philosophical Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#goals"><em>Goals</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#publications">Publications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="method.html">Method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-installation.html">Command Line Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter-notebook-installation.html">GNSS Reflectometry Jupyter Notebook Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases :</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="at01.html">AT01</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to gnssrefl documentation!</a></li>
+      <li>Next: <a href="method.html" title="next chapter">Method</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, dittmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/overview.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

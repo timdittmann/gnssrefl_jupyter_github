@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+
+<html lang="python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>GNSS Reflectometry Jupyter Notebook Installation &#8212; gnssrefl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AT01" href="at01.html" />
+    <link rel="prev" title="Command Line Installation" href="command-line-installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="gnss-reflectometry-jupyter-notebook-installation">
+<h1>GNSS Reflectometry Jupyter Notebook Installation<a class="headerlink" href="#gnss-reflectometry-jupyter-notebook-installation" title="Permalink to this heading">¶</a></h1>
+<p>Jupyter Notebooks for the <a class="reference external" href="https://github.com/kristinemlarson/gnssrefl">GNSS interferometric reflectometry</a> python package.</p>
+<section id="options-for-installation">
+<h2>Options for installation:<a class="headerlink" href="#options-for-installation" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Option I: <span class="xref myst">Use Notebooks with Docker Container</span></p>
+<ul>
+<li><p>Step 1: [Install Docker](#Install Docker)</p></li>
+<li><p>Step 2: Build Docker Image and Run Container</p>
+<ul>
+<li><p>Option 1: <span class="xref myst">Use Dockerhub</span> (RECOMMENDED)</p></li>
+<li><p>Option 2: [Use git repository with bash script](#Docker Git Bash)</p></li>
+<li><p>Option 3: [Use git repository and run manual docker commands](#Docker Git Commands)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Option II: <span class="xref myst">Use Notebooks with local Python build</span></p></li>
+</ul>
+<section id="see-here-for-shutdown-instructions">
+<h3>See Here for shutdown instructions:<a class="headerlink" href="#see-here-for-shutdown-instructions" title="Permalink to this heading">¶</a></h3>
+<p><span class="xref myst">Jupyter and Docker Shutdown Process</span></p>
+</section>
+<section id="see-here-for-instructions-on-how-update-your-docker-with-most-recent-changes">
+<h3>See here for instructions on how update your docker with most recent changes<a class="headerlink" href="#see-here-for-instructions-on-how-update-your-docker-with-most-recent-changes" title="Permalink to this heading">¶</a></h3>
+<p>(most recent update: April 18 2022)</p>
+<p>[Update to Most Recent Docker Image](#Update Docker)</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="use-notebooks-with-docker-container-recommended-method-a-name-docker-a">
+<h2>Use Notebooks with Docker Container (Recommended method) <a name="Docker"></a><a class="headerlink" href="#use-notebooks-with-docker-container-recommended-method-a-name-docker-a" title="Permalink to this heading">¶</a></h2>
+<p>See [here](#Docker Git info) for additional helpful commands for containers.</p>
+<hr class="docutils" />
+<section id="step-1-install-docker-a-name-install-docker-a">
+<h3>Step 1. Install Docker <a name="Install Docker"></a><a class="headerlink" href="#step-1-install-docker-a-name-install-docker-a" title="Permalink to this heading">¶</a></h3>
+<p>   Pick your system and follow instructions on the Docker website.</p>
+<ul class="simple">
+<li><p><strong>Mac</strong> - https://docs.docker.com/docker-for-mac/install/</p></li>
+<li><p><strong>Windows</strong> - https://docs.docker.com/docker-for-windows/install/</p></li>
+<li><p><strong>Ubuntu</strong> - https://docs.docker.com/install/linux/docker-ce/ubuntu/</p></li>
+</ul>
+<p><em>Once installed, type <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">hello-world</span></code> in terminal to check if installed correctly.</em></p>
+<p>More information on <a class="reference external" href="https://docs.docker.com/get-started/">getting started, testing your installation, and developing.</a></p>
+<p>Useful tool to use is <a class="reference external" href="https://www.docker.com/products/docker-desktop">Docker Desktop</a></p>
+</section>
+<section id="step-2">
+<h3>Step 2.<a class="headerlink" href="#step-2" title="Permalink to this heading">¶</a></h3>
+<hr class="docutils" />
+<section id="option-1-build-and-run-docker-container-using-dockerhub-a-name-dockerhub-a">
+<h4>Option 1: build and run docker container using dockerhub <a name="Dockerhub"></a><a class="headerlink" href="#option-1-build-and-run-docker-container-using-dockerhub-a-name-dockerhub-a" title="Permalink to this heading">¶</a></h4>
+<p>Navigate to the directory where you would like to have output data stored.
+Note that the code will create a directory called Files where the final data will be stored for you locally.
+NOTE: If you would like to make your own notebook and keep the changes if you need to remove/update the docker - you can place the notebook in the Files folder.</p>
+<p>Then run:
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">-v</span> <span class="pre">$(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files</span> <span class="pre">-p</span> <span class="pre">8888:8888</span> <span class="pre">--name='gnssrefl_jupyter'</span> <span class="pre">-e</span> <span class="pre">GRANT_SUDO=yes</span> <span class="pre">--user</span> <span class="pre">root</span> <span class="pre">--restart=unless-stopped</span> <span class="pre">unavdocker/gnssrefl_jupyter:latest</span></code></p>
+<p>Description of the commands used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-it</span></code> : interactive process (shell)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> : external volume. All changes will be reflected on your host computer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span></code> : publish on port</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> : name of docker container</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span></code> : granting sudo permissions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--user</span></code> : setting the user</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference</span> <span class="pre">dockerhub</span> <span class="pre">image</span></code> : This will build the dockerhub image if it doesn't already exist locally.</p></li>
+</ul>
+<p>This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste the last url provided at the end into a browser and run the jupyter notebooks from there.
+The url will look something like <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8888/?token=</span></code> with a randomly generated token at the end.</p>
+<p>DONE - Below are other options for installation.</p>
+</section>
+<hr class="docutils" />
+<section id="option-2-build-image-and-run-container-using-git-repository-with-bash-script-a-name-docker-git-bash-a">
+<h4>Option 2: Build image and run container using git repository with bash script <a name="Docker Git Bash"></a><a class="headerlink" href="#option-2-build-image-and-run-container-using-git-repository-with-bash-script-a-name-docker-git-bash-a" title="Permalink to this heading">¶</a></h4>
+<section id="step-1-clone-the-git-repository-to-your-local-machine-a-name-git-a">
+<h5>Step 1. Clone the Git Repository to your local machine <a name="Git"></a><a class="headerlink" href="#step-1-clone-the-git-repository-to-your-local-machine-a-name-git-a" title="Permalink to this heading">¶</a></h5>
+<p>For instructions on how to install git on any OS: https://github.com/git-guides/install-git
+Use the HTTPS link in this repository to clone the repository to your local machine. You may do this in a terminal
+using git or use a git client (<a class="reference external" href="https://git-fork.com/">Fork</a>, etc...) You will want to do this in a location on your local computer that you
+wish to store the repository.</p>
+<p>To clone a repository onto your local machine using the HTTPS link, click on the drop down that says 'clone' in the
+repository and copy the link that says 'Clone with HTTPS'. Using your terminal, navigate to where you would like to clone
+the repository and then run the command <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">[https</span> <span class="pre">url]</span></code></p>
+<p>To get the latest version of master or your own branch,  use the git pull command from inside the now-local repository.</p>
+</section>
+<section id="step-2-build-the-docker-image-and-run-the-container-using-the-bash-script-in-this-repository">
+<h5>Step 2. Build the docker image and run the container using the bash script in this repository<a class="headerlink" href="#step-2-build-the-docker-image-and-run-the-container-using-the-bash-script-in-this-repository" title="Permalink to this heading">¶</a></h5>
+<p>This repository includes a shell script that will set up the image and container for you. Then run:
+<code class="docutils literal notranslate"><span class="pre">./build_docker.sh</span></code></p>
+<p>(you may need to give this file executable permission: <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">build_docker.sh</span></code>)</p>
+<p>This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+The url will look something like <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8888/?token=</span></code> with a randomly generated token at the end.</p>
+<p>DONE - Below are other options for installation.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="option-3-build-image-and-run-container-using-git-repository-with-docker-commadns-a-name-docker-git-commands-a">
+<h4>Option 3: Build image and run container using git repository with docker commadns <a name="Docker Git Commands"></a><a class="headerlink" href="#option-3-build-image-and-run-container-using-git-repository-with-docker-commadns-a-name-docker-git-commands-a" title="Permalink to this heading">¶</a></h4>
+<p>To set up the docker image and container use the following instructions:</p>
+<section id="step-1-clone-the-git-repository-to-your-local-machine-see-above">
+<h5>Step 1. <span class="xref myst">Clone the Git Repository to your local machine</span> (see above)<a class="headerlink" href="#step-1-clone-the-git-repository-to-your-local-machine-see-above" title="Permalink to this heading">¶</a></h5>
+</section>
+<section id="build-the-docker-image">
+<h5><strong>Build the Docker image</strong><a class="headerlink" href="#build-the-docker-image" title="Permalink to this heading">¶</a></h5>
+<p>Navigate to the directory where the Dockerfile from this repository is stored and run...</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">--rm</span> <span class="pre">-t</span> <span class="pre">gnssrefl_jupyter</span> <span class="pre">.</span></code></p>
+<p>Description of the commands used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--rm</span> </code>: remove temporary images built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span></code> : tag/name the docker image 'gnssrefl_jupyter'</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code> : to build it in current directory</p></li>
+</ul>
+</section>
+<section id="run-image-as-container">
+<h5>Run image as container<a class="headerlink" href="#run-image-as-container" title="Permalink to this heading">¶</a></h5>
+<p>Prior to running the docker, make sure you do not have other jupyter notebooks running on 8888 or else it will not work properly. To open the jupyter notebook directly in the run command...</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">-v</span> <span class="pre">$(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files</span> <span class="pre">-p</span> <span class="pre">8888:8888</span> <span class="pre">--name='gnssrefl_jupyter'</span> <span class="pre">-e</span> <span class="pre">GRANT_SUDO=yes</span> <span class="pre">--user</span> <span class="pre">root</span> <span class="pre">--restart=unless-stopped</span> <span class="pre">gnssrefl_jupyter</span></code></p>
+<p>Description of the commands used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-it</span></code> : interactive process (shell)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> : external volume. All changes will be reflected on your host computer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span></code> : publish on port</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> : name of docker container</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span></code> : granting sudo permissions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--user</span></code> : setting the user</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference</span> <span class="pre">docker</span> <span class="pre">image</span></code></p></li>
+</ul>
+<p>This will build the docker image and run the container. Once everything has finished building in the terminal, you can copy and paste one of the urls provided at th end into a browser and run the jupyter notebooks from there.
+The url will look something like <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8888/?token=</span></code> with a randomly generated token at the end.</p>
+<p>DONE.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="shutdown-a-name-shutdown-a">
+<h4>Shutdown <a name="Shutdown"></a><a class="headerlink" href="#shutdown-a-name-shutdown-a" title="Permalink to this heading">¶</a></h4>
+<p>To Shut down the Jupyter notebook from the terminal just use <code class="docutils literal notranslate"><span class="pre">ctrl+c</span></code></p>
+<p>To shut down the docker container run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">stop</span> <span class="pre">[container</span> <span class="pre">name]</span></code>
+If you need to see the container(s) you have running you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code></p>
+</section>
+<section id="update-docker-image-to-newest-version-a-name-update-docker-a">
+<h4>Update Docker Image to newest version <a name="Update Docker"></a><a class="headerlink" href="#update-docker-image-to-newest-version-a-name-update-docker-a" title="Permalink to this heading">¶</a></h4>
+<p>To update your Image from our DockerHub. Run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">unavdocker/gnssrefl_jupyter</span></code></p>
+<p>Then you will need to launch an updated container.
+If your container is running - stop the container (see above).
+Then run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">rm</span> <span class="pre">[container</span> <span class="pre">name]</span></code></p>
+<p>finally you can re-run the container:
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">-v</span> <span class="pre">$(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files</span> <span class="pre">-p</span> <span class="pre">8888:8888</span> <span class="pre">--name='gnssrefl_jupyter'</span> <span class="pre">-e</span> <span class="pre">GRANT_SUDO=yes</span> <span class="pre">--user</span> <span class="pre">root</span> <span class="pre">--restart=unless-stopped</span> <span class="pre">unavdocker/gnssrefl_jupyter:latest</span></code></p>
+</section>
+<section id="additional-information-for-running-a-docker-container-a-name-docker-git-info-a">
+<h4>Additional information for running a docker container: <a name="Docker Git info"></a><a class="headerlink" href="#additional-information-for-running-a-docker-container-a-name-docker-git-info-a" title="Permalink to this heading">¶</a></h4>
+<p>The following are additional docker commands that are optional:</p>
+<section id="optional-add-your-own-directories-as-external-volumes">
+<h5>(optional) Add your own directories as external volumes<a class="headerlink" href="#optional-add-your-own-directories-as-external-volumes" title="Permalink to this heading">¶</a></h5>
+<p>If you want to add your own external volume add another <code class="docutils literal notranslate"><span class="pre">-v</span></code> command to the docker run command. You can add as many external volumes as you wish. All changes will be reflected on your host computer.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-v</span> <span class="pre">~/[your_host_directory]:/home/jovyan/gnssrefl_jupyter/[personal_directory_name]</span></code></p>
+</section>
+<section id="optional-run-image-as-container-in-detached-mode">
+<h5>(optional) Run image as container in detached mode<a class="headerlink" href="#optional-run-image-as-container-in-detached-mode" title="Permalink to this heading">¶</a></h5>
+<p>If instead you wish to not run the container in the current terminal, then run the container in detached mode. To do this, add a <code class="docutils literal notranslate"><span class="pre">-d</span></code> to the docker run command...</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">-d</span> <span class="pre">-p</span> <span class="pre">8888:8888</span> <span class="pre">--name='gnssrefl_jupyter'</span> <span class="pre">-e</span> <span class="pre">GRANT_SUDO=yes</span> <span class="pre">--user</span> <span class="pre">root</span> <span class="pre">-v</span> <span class="pre">$(pwd)/Files:/home/jovyan/gnssrefl_jupyter/Files</span> <span class="pre">--restart=unless-stopped</span> <span class="pre">gnssrefl_jupyter</span></code></p>
+<p>If your container is running and you need to enter the container (such as detached mode), then use the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span></code> command to enter the container in a bash shell.</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">gnssrefl_jupyter</span> <span class="pre">/bin/bash</span></code></p>
+<p>From here you can obtain the token for the Jupyter Notebook by running the command <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">list</span></code> to get the link and token to run the notebook in your browser.</p>
+</section>
+</section>
+<section id="stop-container-and-remove-container">
+<h4>Stop container and remove container<a class="headerlink" href="#stop-container-and-remove-container" title="Permalink to this heading">¶</a></h4>
+<p>If you need to change your docker run command, exit out of jupyter notebook (Control-C), stop, and remove the container before running a new one.</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">stop</span> <span class="pre">gnssrefl_jupyter</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">rm</span> <span class="pre">gnssrefl_jupyter</span></code></p>
+</section>
+<section id="remove-image">
+<h4>Remove image<a class="headerlink" href="#remove-image" title="Permalink to this heading">¶</a></h4>
+<p>If you need to rebuild the image, follow the previous steps to remove the container and then remove the image before trying to rebuild.</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">rm</span> <span class="pre">gnssrefl_jupyter</span></code></p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="use-notebooks-without-docker-a-name-local-a">
+<h2>Use Notebooks without Docker <a name="Local"></a><a class="headerlink" href="#use-notebooks-without-docker-a-name-local-a" title="Permalink to this heading">¶</a></h2>
+<p>If you do not wish to use the docker container, then you can run Jupyter notebook using your local Python 3 environment.</p>
+<p><strong>NOTE</strong> this setup requires system dependencies: <strong>gcc</strong> and <strong>gfortran</strong>.</p>
+<p>To install:</p>
+<ul class="simple">
+<li><p>if you are using a LINUX then simply run <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">gfortran</span></code> in your terminal.</p></li>
+<li><p>if you are using a MacOS then you will need to install xcode. First, in your terminal, check if you have xcode by <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">-p</span></code>.
+If it is installed, it should return a path. If it is not installed then run <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code>.
+This should install gcc.You can check if you have gcc by <code class="docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">--version</span></code>. Check if you have gfortran by <code class="docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">--version</span></code>.
+If you do not have gfortran, then follow instructions to install for your system <a class="reference external" href="https://gcc.gnu.org/wiki/GFortranBinariesMacOS">here</a> for MacOS
+and <a class="reference external" href="https://gcc.gnu.org/wiki/GFortranBinaries">here</a> for Linux.</p></li>
+</ul>
+<p>If you are still experiencing trouble then it is recommended you try the docker version of these notebooks. See above.</p>
+<section id="clone-the-git-repository-to-your-local-machine">
+<h3>Clone the Git Repository to your local machine<a class="headerlink" href="#clone-the-git-repository-to-your-local-machine" title="Permalink to this heading">¶</a></h3>
+<p>For instructions on how to install git on any OS: https://github.com/git-guides/install-git</p>
+<p>Use the HTTPS link in this repository to clone the repository to your local machine. You may do this in a terminal
+using git or use a git client (<a class="reference external" href="https://git-fork.com/">Fork</a>, etc...) You will want to do this in a location on your local computer that you
+wish to store the repository.</p>
+<p>To clone a repository onto your local machine using the HTTPS link, click on the drop down that says 'clone' in the
+repository and copy the link that says 'Clone with HTTPS'. Using your terminal, navigate to where you would like to clone
+the repository and then run the command <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">[https</span> <span class="pre">url]</span></code></p>
+<p>To get the latest version of master or your own branch, use the git pull command from inside the now-local repository.</p>
+</section>
+<section id="pip-install-requirements">
+<h3>pip install requirements<a class="headerlink" href="#pip-install-requirements" title="Permalink to this heading">¶</a></h3>
+<p>To install all the required python packages, use pip to install the requirements.txt file.
+Navigate to the gnssrefl_jupyter directory (where you cloned this repository) that contains the requirements.txt file and run:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<p>*note that depending on your environmnet you may need to use pip3 instead of pip.</p>
+</section>
+<section id="run-jupyter-notebook">
+<h3>run jupyter notebook<a class="headerlink" href="#run-jupyter-notebook" title="Permalink to this heading">¶</a></h3>
+<p>run the command jupyter notebook and it should open a local jupyter instance in a browser.</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="directories">
+<h2>Directories<a class="headerlink" href="#directories" title="Permalink to this heading">¶</a></h2>
+<section id="the-notebook-directory">
+<h3><strong>The notebook directory</strong><a class="headerlink" href="#the-notebook-directory" title="Permalink to this heading">¶</a></h3>
+<p>The notebook directory is where we store the notebooks for the gnssir use cases.</p>
+</section>
+<section id="the-bin-directory">
+<h3><strong>The bin directory</strong><a class="headerlink" href="#the-bin-directory" title="Permalink to this heading">¶</a></h3>
+<p>The bin directory contains all of the executable and importable scripts.</p>
+</section>
+<section id="the-data-directory">
+<h3><strong>The data directory</strong><a class="headerlink" href="#the-data-directory" title="Permalink to this heading">¶</a></h3>
+<p>Contains any data or figures needed to generate content for the gnssir notebooks.</p>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gnssrefl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method.html">Method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command-line-installation.html">Command Line Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GNSS Reflectometry Jupyter Notebook Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#options-for-installation">Options for installation:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-notebooks-with-docker-container-recommended-method-a-name-docker-a">Use Notebooks with Docker Container (Recommended method) <a name="Docker"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-notebooks-without-docker-a-name-local-a">Use Notebooks without Docker <a name="Local"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directories">Directories</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases :</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="at01.html">AT01</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="command-line-installation.html" title="previous chapter">Command Line Installation</a></li>
+      <li>Next: <a href="at01.html" title="next chapter">AT01</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, dittmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/jupyter-notebook-installation.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
