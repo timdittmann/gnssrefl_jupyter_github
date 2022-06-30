@@ -31,6 +31,13 @@ Welcome to gnssrefl documentation!
 .. toctree::
    :maxdepth: 3
    :hidden:
+   :caption: API Reference :
+
+   api/index.rst
+
+.. toctree::
+   :maxdepth: 3
+   :hidden:
    :caption: Use Cases :
    
    at01.rst 

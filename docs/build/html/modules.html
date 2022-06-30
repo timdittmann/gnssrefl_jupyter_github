@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html lang="python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>gnssrefl &#8212; gnssrefl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gnssrefl package" href="gnssrefl.html" />
+    <link rel="prev" title="GNSS Reflectometry Jupyter Notebook Installation" href="jupyter-notebook-installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="gnssrefl">
+<h1>gnssrefl<a class="headerlink" href="#gnssrefl" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gnssrefl.html">gnssrefl package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.cddis_highrate">gnssrefl.cddis_highrate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.check_gnss">gnssrefl.check_gnss module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.check_rinex">gnssrefl.check_rinex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.computemp1mp2">gnssrefl.computemp1mp2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.daily_avg">gnssrefl.daily_avg module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.daily_avg_cl">gnssrefl.daily_avg_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.download_orbits">gnssrefl.download_orbits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.download_rinex">gnssrefl.download_rinex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.download_teqc">gnssrefl.download_teqc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.download_tides">gnssrefl.download_tides module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.download_unr">gnssrefl.download_unr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.filesizes">gnssrefl.filesizes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gnssir">gnssrefl.gnssir module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gnssir_cl">gnssrefl.gnssir_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gnsssnr">gnssrefl.gnsssnr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gnsssnrbigger">gnssrefl.gnsssnrbigger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gps">gnssrefl.gps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gpssnr">gnssrefl.gpssnr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.gpsweek">gnssrefl.gpsweek module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.installexe_cl">gnssrefl.installexe_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.invsnr_cl">gnssrefl.invsnr_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.invsnr_input">gnssrefl.invsnr_input module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.karnak_libraries">gnssrefl.karnak_libraries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.llh2xyz">gnssrefl.llh2xyz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.make_json_input">gnssrefl.make_json_input module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.nmea2snr">gnssrefl.nmea2snr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.nmea2snr_cl">gnssrefl.nmea2snr_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.plot_results">gnssrefl.plot_results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.prn2gps">gnssrefl.prn2gps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.query_unr">gnssrefl.query_unr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.quickLook">gnssrefl.quickLook module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.quickLook_cl">gnssrefl.quickLook_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.quickLook_function">gnssrefl.quickLook_function module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.read_snr_files">gnssrefl.read_snr_files module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.refraction">gnssrefl.refraction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rinex2snr">gnssrefl.rinex2snr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rinex2snr_cl">gnssrefl.rinex2snr_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rinex3_rinex2">gnssrefl.rinex3_rinex2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rinex3_snr">gnssrefl.rinex3_snr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rinpy">gnssrefl.rinpy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.rnx2snr">gnssrefl.rnx2snr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.spline_functions">gnssrefl.spline_functions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.subdaily">gnssrefl.subdaily module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.subdaily_cl">gnssrefl.subdaily_cl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.update_snr_files">gnssrefl.update_snr_files module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.utils">gnssrefl.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.veg_multiyr">gnssrefl.veg_multiyr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.xyz2llh">gnssrefl.xyz2llh module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.ydoy">gnssrefl.ydoy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl.ymd">gnssrefl.ymd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html#module-gnssrefl">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gnssrefl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method.html">Method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-installation.html">Command Line Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter-notebook-installation.html">GNSS Reflectometry Jupyter Notebook Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference :</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">gnssrefl</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gnssrefl.html">gnssrefl package</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases :</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="at01.html">AT01</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributions and Questions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributions-questions.html">Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions-questions.html#questions">Questions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="jupyter-notebook-installation.html" title="previous chapter">GNSS Reflectometry Jupyter Notebook Installation</a></li>
+      <li>Next: <a href="gnssrefl.html" title="next chapter">gnssrefl package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, dittmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/modules.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

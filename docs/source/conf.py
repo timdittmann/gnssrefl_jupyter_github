@@ -10,10 +10,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../..'))
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../'))
+import mock
+ 
+MOCK_MODULES = ['progress.bar','progress','wget','numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate','scipy.signal']
+for mod_name in MOCK_MODULES:
+  sys.modules[mod_name] = mock.Mock()
 
 # -- Project information -----------------------------------------------------
 
@@ -27,7 +33,7 @@ author = 'dittmann'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['myst_parser','nbsphinx']
+extensions = ['myst_parser','nbsphinx','sphinx.ext.autodoc','sphinx.ext.autosummary']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
